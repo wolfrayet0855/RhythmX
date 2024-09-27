@@ -21,11 +21,11 @@
 		9A284FC52CA70A8D0021A785 /* EventsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FC42CA70A8D0021A785 /* EventsListView.swift */; };
 		9A284FC72CA70AB50021A785 /* ListViewRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FC62CA70AB50021A785 /* ListViewRow.swift */; };
 		9A284FC92CA70ADF0021A785 /* StartTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FC82CA70ADF0021A785 /* StartTabView.swift */; };
-		9A6F3CB92CA717B1005D5328 /* rhythm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6F3CB82CA717B1005D5328 /* rhythm.swift */; };
+		9A6F3CB92CA717B1005D5328 /* Rhythm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6F3CB82CA717B1005D5328 /* Rhythm.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		9A284F962CA701960021A785 /* rhythm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rhythm.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A284F962CA701960021A785 /* Rhythm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rhythm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A284F9D2CA701980021A785 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9A284FA02CA701980021A785 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9A284FAC2CA7082E0021A785 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
@@ -40,7 +40,7 @@
 		9A284FC42CA70A8D0021A785 /* EventsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsListView.swift; sourceTree = "<group>"; };
 		9A284FC62CA70AB50021A785 /* ListViewRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewRow.swift; sourceTree = "<group>"; };
 		9A284FC82CA70ADF0021A785 /* StartTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartTabView.swift; sourceTree = "<group>"; };
-		9A6F3CB82CA717B1005D5328 /* rhythm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rhythm.swift; sourceTree = "<group>"; };
+		9A6F3CB82CA717B1005D5328 /* Rhythm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rhythm.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,8 +57,8 @@
 		9A284F8D2CA701960021A785 = {
 			isa = PBXGroup;
 			children = (
-				9A6F3CB82CA717B1005D5328 /* rhythm.swift */,
-				9A284F982CA701960021A785 /* rhythm */,
+				9A6F3CB82CA717B1005D5328 /* Rhythm.swift */,
+				9A284F982CA701960021A785 /* Rhythm */,
 				9A284F972CA701960021A785 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -66,12 +66,12 @@
 		9A284F972CA701960021A785 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9A284F962CA701960021A785 /* rhythm.app */,
+				9A284F962CA701960021A785 /* Rhythm.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9A284F982CA701960021A785 /* rhythm */ = {
+		9A284F982CA701960021A785 /* Rhythm */ = {
 			isa = PBXGroup;
 			children = (
 				9A284FB32CA708C30021A785 /* Views */,
@@ -80,7 +80,7 @@
 				9A284F9D2CA701980021A785 /* Assets.xcassets */,
 				9A284F9F2CA701980021A785 /* Preview Content */,
 			);
-			path = rhythm;
+			path = Rhythm;
 			sourceTree = "<group>";
 		};
 		9A284F9F2CA701980021A785 /* Preview Content */ = {
@@ -151,9 +151,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9A284F952CA701960021A785 /* rhythm */ = {
+		9A284F952CA701960021A785 /* Rhythm */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9A284FA42CA701980021A785 /* Build configuration list for PBXNativeTarget "rhythm" */;
+			buildConfigurationList = 9A284FA42CA701980021A785 /* Build configuration list for PBXNativeTarget "Rhythm" */;
 			buildPhases = (
 				9A284F922CA701960021A785 /* Sources */,
 				9A284F932CA701960021A785 /* Frameworks */,
@@ -163,9 +163,9 @@
 			);
 			dependencies = (
 			);
-			name = rhythm;
+			name = Rhythm;
 			productName = Lunar;
-			productReference = 9A284F962CA701960021A785 /* rhythm.app */;
+			productReference = 9A284F962CA701960021A785 /* Rhythm.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -183,7 +183,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 9A284F912CA701960021A785 /* Build configuration list for PBXProject "rhythm" */;
+			buildConfigurationList = 9A284F912CA701960021A785 /* Build configuration list for PBXProject "Rhythm" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -196,7 +196,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9A284F952CA701960021A785 /* rhythm */,
+				9A284F952CA701960021A785 /* Rhythm */,
 			);
 		};
 /* End PBXProject section */
@@ -227,7 +227,7 @@
 				9A284FC52CA70A8D0021A785 /* EventsListView.swift in Sources */,
 				9A284FC72CA70AB50021A785 /* ListViewRow.swift in Sources */,
 				9A284FBF2CA709D80021A785 /* EventFormView.swift in Sources */,
-				9A6F3CB92CA717B1005D5328 /* rhythm.swift in Sources */,
+				9A6F3CB92CA717B1005D5328 /* Rhythm.swift in Sources */,
 				9A284FBD2CA709AE0021A785 /* EventFormType.swift in Sources */,
 				9A284FAD2CA7082E0021A785 /* Date+Extension.swift in Sources */,
 				9A284FC12CA70A1D0021A785 /* EventFormViewModel.swift in Sources */,
@@ -377,7 +377,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = beta.rhythm;
+				PRODUCT_BUNDLE_IDENTIFIER = beta.Rhythm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -406,7 +406,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = beta.rhythm;
+				PRODUCT_BUNDLE_IDENTIFIER = beta.Rhythm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -417,7 +417,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		9A284F912CA701960021A785 /* Build configuration list for PBXProject "rhythm" */ = {
+		9A284F912CA701960021A785 /* Build configuration list for PBXProject "Rhythm" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9A284FA22CA701980021A785 /* Debug */,
@@ -426,7 +426,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9A284FA42CA701980021A785 /* Build configuration list for PBXNativeTarget "rhythm" */ = {
+		9A284FA42CA701980021A785 /* Build configuration list for PBXNativeTarget "Rhythm" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9A284FA52CA701980021A785 /* Debug */,
