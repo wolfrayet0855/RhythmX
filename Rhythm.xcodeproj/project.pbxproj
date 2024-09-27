@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		9A284F9A2CA701960021A785 /* rhythm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284F992CA701960021A785 /* rhythm.swift */; };
 		9A284F9E2CA701980021A785 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A284F9D2CA701980021A785 /* Assets.xcassets */; };
 		9A284FA12CA701980021A785 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A284FA02CA701980021A785 /* Preview Assets.xcassets */; };
 		9A284FAD2CA7082E0021A785 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FAC2CA7082E0021A785 /* Date+Extension.swift */; };
@@ -22,11 +21,11 @@
 		9A284FC52CA70A8D0021A785 /* EventsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FC42CA70A8D0021A785 /* EventsListView.swift */; };
 		9A284FC72CA70AB50021A785 /* ListViewRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FC62CA70AB50021A785 /* ListViewRow.swift */; };
 		9A284FC92CA70ADF0021A785 /* StartTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FC82CA70ADF0021A785 /* StartTabView.swift */; };
+		9A6F3CB92CA717B1005D5328 /* rhythm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6F3CB82CA717B1005D5328 /* rhythm.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		9A284F962CA701960021A785 /* rhythm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rhythm.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		9A284F992CA701960021A785 /* rhythm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rhythm.swift; sourceTree = "<group>"; };
 		9A284F9D2CA701980021A785 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9A284FA02CA701980021A785 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9A284FAC2CA7082E0021A785 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
@@ -41,6 +40,7 @@
 		9A284FC42CA70A8D0021A785 /* EventsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsListView.swift; sourceTree = "<group>"; };
 		9A284FC62CA70AB50021A785 /* ListViewRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewRow.swift; sourceTree = "<group>"; };
 		9A284FC82CA70ADF0021A785 /* StartTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartTabView.swift; sourceTree = "<group>"; };
+		9A6F3CB82CA717B1005D5328 /* rhythm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rhythm.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +57,7 @@
 		9A284F8D2CA701960021A785 = {
 			isa = PBXGroup;
 			children = (
+				9A6F3CB82CA717B1005D5328 /* rhythm.swift */,
 				9A284F982CA701960021A785 /* rhythm */,
 				9A284F972CA701960021A785 /* Products */,
 			);
@@ -76,7 +77,6 @@
 				9A284FB32CA708C30021A785 /* Views */,
 				9A284FAE2CA708510021A785 /* Models */,
 				9A284FAB2CA7080A0021A785 /* Extensions */,
-				9A284F992CA701960021A785 /* rhythm.swift */,
 				9A284F9D2CA701980021A785 /* Assets.xcassets */,
 				9A284F9F2CA701980021A785 /* Preview Content */,
 			);
@@ -220,7 +220,6 @@
 			files = (
 				9A284FB62CA7090A0021A785 /* CalendarView.swift in Sources */,
 				9A284FB82CA709390021A785 /* DaysEvents.swift in Sources */,
-				9A284F9A2CA701960021A785 /* rhythm.swift in Sources */,
 				9A284FC92CA70ADF0021A785 /* StartTabView.swift in Sources */,
 				9A284FB02CA708630021A785 /* Event.swift in Sources */,
 				9A284FB22CA708930021A785 /* EventStore.swift in Sources */,
@@ -228,6 +227,7 @@
 				9A284FC52CA70A8D0021A785 /* EventsListView.swift in Sources */,
 				9A284FC72CA70AB50021A785 /* ListViewRow.swift in Sources */,
 				9A284FBF2CA709D80021A785 /* EventFormView.swift in Sources */,
+				9A6F3CB92CA717B1005D5328 /* rhythm.swift in Sources */,
 				9A284FBD2CA709AE0021A785 /* EventFormType.swift in Sources */,
 				9A284FAD2CA7082E0021A785 /* Date+Extension.swift in Sources */,
 				9A284FC12CA70A1D0021A785 /* EventFormViewModel.swift in Sources */,
