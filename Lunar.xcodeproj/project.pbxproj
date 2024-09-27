@@ -8,17 +8,39 @@
 
 /* Begin PBXBuildFile section */
 		9A284F9A2CA701960021A785 /* LunarApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284F992CA701960021A785 /* LunarApp.swift */; };
-		9A284F9C2CA701960021A785 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284F9B2CA701960021A785 /* ContentView.swift */; };
 		9A284F9E2CA701980021A785 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A284F9D2CA701980021A785 /* Assets.xcassets */; };
 		9A284FA12CA701980021A785 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A284FA02CA701980021A785 /* Preview Assets.xcassets */; };
+		9A284FAD2CA7082E0021A785 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FAC2CA7082E0021A785 /* Date+Extension.swift */; };
+		9A284FB02CA708630021A785 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FAF2CA708630021A785 /* Event.swift */; };
+		9A284FB22CA708930021A785 /* EventStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FB12CA708930021A785 /* EventStore.swift */; };
+		9A284FB62CA7090A0021A785 /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FB52CA7090A0021A785 /* CalendarView.swift */; };
+		9A284FB82CA709390021A785 /* DaysEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FB72CA709390021A785 /* DaysEvents.swift */; };
+		9A284FBA2CA709610021A785 /* EventsCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FB92CA709610021A785 /* EventsCalendarView.swift */; };
+		9A284FBD2CA709AE0021A785 /* EventFormType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FBC2CA709AE0021A785 /* EventFormType.swift */; };
+		9A284FBF2CA709D80021A785 /* EventFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FBE2CA709D80021A785 /* EventFormView.swift */; };
+		9A284FC12CA70A1D0021A785 /* EventFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FC02CA70A1D0021A785 /* EventFormViewModel.swift */; };
+		9A284FC52CA70A8D0021A785 /* EventsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FC42CA70A8D0021A785 /* EventsListView.swift */; };
+		9A284FC72CA70AB50021A785 /* ListViewRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FC62CA70AB50021A785 /* ListViewRow.swift */; };
+		9A284FC92CA70ADF0021A785 /* StartTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FC82CA70ADF0021A785 /* StartTabView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		9A284F962CA701960021A785 /* Lunar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lunar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A284F992CA701960021A785 /* LunarApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LunarApp.swift; sourceTree = "<group>"; };
-		9A284F9B2CA701960021A785 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		9A284F9D2CA701980021A785 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9A284FA02CA701980021A785 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		9A284FAC2CA7082E0021A785 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
+		9A284FAF2CA708630021A785 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		9A284FB12CA708930021A785 /* EventStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventStore.swift; sourceTree = "<group>"; };
+		9A284FB52CA7090A0021A785 /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		9A284FB72CA709390021A785 /* DaysEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysEvents.swift; sourceTree = "<group>"; };
+		9A284FB92CA709610021A785 /* EventsCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsCalendarView.swift; sourceTree = "<group>"; };
+		9A284FBC2CA709AE0021A785 /* EventFormType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFormType.swift; sourceTree = "<group>"; };
+		9A284FBE2CA709D80021A785 /* EventFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFormView.swift; sourceTree = "<group>"; };
+		9A284FC02CA70A1D0021A785 /* EventFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventFormViewModel.swift; sourceTree = "<group>"; };
+		9A284FC42CA70A8D0021A785 /* EventsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsListView.swift; sourceTree = "<group>"; };
+		9A284FC62CA70AB50021A785 /* ListViewRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewRow.swift; sourceTree = "<group>"; };
+		9A284FC82CA70ADF0021A785 /* StartTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartTabView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,8 +73,10 @@
 		9A284F982CA701960021A785 /* Lunar */ = {
 			isa = PBXGroup;
 			children = (
+				9A284FB32CA708C30021A785 /* Views */,
+				9A284FAE2CA708510021A785 /* Models */,
+				9A284FAB2CA7080A0021A785 /* Extensions */,
 				9A284F992CA701960021A785 /* LunarApp.swift */,
-				9A284F9B2CA701960021A785 /* ContentView.swift */,
 				9A284F9D2CA701980021A785 /* Assets.xcassets */,
 				9A284F9F2CA701980021A785 /* Preview Content */,
 			);
@@ -65,6 +89,63 @@
 				9A284FA02CA701980021A785 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		9A284FAB2CA7080A0021A785 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				9A284FAC2CA7082E0021A785 /* Date+Extension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		9A284FAE2CA708510021A785 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9A284FAF2CA708630021A785 /* Event.swift */,
+				9A284FB12CA708930021A785 /* EventStore.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		9A284FB32CA708C30021A785 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9A284FC32CA70A530021A785 /* ListViewTab */,
+				9A284FBB2CA7097E0021A785 /* EditUpdateView */,
+				9A284FB42CA708E20021A785 /* CalendarViewTab */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		9A284FB42CA708E20021A785 /* CalendarViewTab */ = {
+			isa = PBXGroup;
+			children = (
+				9A284FB52CA7090A0021A785 /* CalendarView.swift */,
+				9A284FB72CA709390021A785 /* DaysEvents.swift */,
+				9A284FB92CA709610021A785 /* EventsCalendarView.swift */,
+			);
+			path = CalendarViewTab;
+			sourceTree = "<group>";
+		};
+		9A284FBB2CA7097E0021A785 /* EditUpdateView */ = {
+			isa = PBXGroup;
+			children = (
+				9A284FBC2CA709AE0021A785 /* EventFormType.swift */,
+				9A284FBE2CA709D80021A785 /* EventFormView.swift */,
+				9A284FC02CA70A1D0021A785 /* EventFormViewModel.swift */,
+			);
+			path = EditUpdateView;
+			sourceTree = "<group>";
+		};
+		9A284FC32CA70A530021A785 /* ListViewTab */ = {
+			isa = PBXGroup;
+			children = (
+				9A284FC42CA70A8D0021A785 /* EventsListView.swift */,
+				9A284FC62CA70AB50021A785 /* ListViewRow.swift */,
+				9A284FC82CA70ADF0021A785 /* StartTabView.swift */,
+			);
+			path = ListViewTab;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -137,8 +218,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A284F9C2CA701960021A785 /* ContentView.swift in Sources */,
+				9A284FB62CA7090A0021A785 /* CalendarView.swift in Sources */,
+				9A284FB82CA709390021A785 /* DaysEvents.swift in Sources */,
 				9A284F9A2CA701960021A785 /* LunarApp.swift in Sources */,
+				9A284FC92CA70ADF0021A785 /* StartTabView.swift in Sources */,
+				9A284FB02CA708630021A785 /* Event.swift in Sources */,
+				9A284FB22CA708930021A785 /* EventStore.swift in Sources */,
+				9A284FBA2CA709610021A785 /* EventsCalendarView.swift in Sources */,
+				9A284FC52CA70A8D0021A785 /* EventsListView.swift in Sources */,
+				9A284FC72CA70AB50021A785 /* ListViewRow.swift in Sources */,
+				9A284FBF2CA709D80021A785 /* EventFormView.swift in Sources */,
+				9A284FBD2CA709AE0021A785 /* EventFormType.swift in Sources */,
+				9A284FAD2CA7082E0021A785 /* Date+Extension.swift in Sources */,
+				9A284FC12CA70A1D0021A785 /* EventFormViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,10 +8,13 @@
 import SwiftUI
 
 @main
-struct LunarApp: App {
+struct AppEntry: App {
+    @StateObject var myEvents = EventStore(preview: true)
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            StartTabView()
+                .environmentObject(myEvents)
         }
     }
 }
