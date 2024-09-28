@@ -15,14 +15,14 @@ struct EventFormView: View {
                     DatePicker(selection: $viewModel.date) {
                         Text("Date and Time")
                     }
-                    TextField("Note", text: $viewModel.note, axis: .vertical)
-                        .focused($focus, equals: true)
                     Picker("Event Type", selection: $viewModel.eventType) {
                         ForEach(Event.EventType.allCases) {eventType in
                             Text(eventType.icon + " " + eventType.rawValue.capitalized)
                                 .tag(eventType)
                         }
                     }
+                    TextField("Note", text: $viewModel.note, axis: .vertical)
+                        .focused($focus, equals: true)
                     Section(footer:
                                 HStack {
                         Spacer()

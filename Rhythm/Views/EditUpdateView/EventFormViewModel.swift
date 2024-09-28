@@ -5,7 +5,7 @@ import Foundation
 class EventFormViewModel: ObservableObject {
     @Published var date = Date()
     @Published var note = ""
-    @Published var eventType: Event.EventType = .unspecified
+    @Published var eventType: Event.EventType = .introspection
 
     var id: String?
     var updating: Bool { id != nil }

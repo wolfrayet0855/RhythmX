@@ -5,7 +5,7 @@ import Foundation
 
 struct Event: Identifiable {
     enum EventType: String, Identifiable, CaseIterable {
-        case menstrual, follicular, ovulation, luteal, unspecified
+        case menstrual, follicular, ovulation, luteal, introspection
         var id: String {
             self.rawValue
         }
@@ -20,7 +20,7 @@ struct Event: Identifiable {
                 return "❸"
             case .luteal:
                 return "❹"
-            case .unspecified:
+            case .introspection:
                 return "☪︎"
             }
         }
@@ -44,7 +44,7 @@ struct Event: Identifiable {
         return dateComponents
     }
 
-    init(id: String = UUID().uuidString, eventType: EventType = .unspecified, date: Date, note: String) {
+    init(id: String = UUID().uuidString, eventType: EventType = .introspection, date: Date, note: String) {
         self.eventType = eventType
         self.date = date
         self.note = note

@@ -12,7 +12,8 @@ struct ListViewRow: View {
                 HStack {
                     Text(event.eventType.icon)
                         .font(.system(size: 40))
-                    Text(event.note)
+                    Text(event.eventType.rawValue.capitalized.hasPrefix("Introspection") ? event.eventType.rawValue.capitalized : "\(event.eventType.rawValue.capitalized) Phase")
+
                 }
                 Text(
                     event.date.formatted(date: .abbreviated,
