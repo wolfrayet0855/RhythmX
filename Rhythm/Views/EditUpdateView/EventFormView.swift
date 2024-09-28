@@ -15,7 +15,7 @@ struct EventFormView: View {
                     DatePicker(selection: $viewModel.date) {
                         Text("Date and Time")
                     }
-                    Picker("Event Type", selection: $viewModel.eventType) {
+                    Picker("Phase Type", selection: $viewModel.eventType) {
                         ForEach(Event.EventType.allCases) {eventType in
                             Text(eventType.icon + " " + eventType.rawValue.capitalized)
                                 .tag(eventType)
