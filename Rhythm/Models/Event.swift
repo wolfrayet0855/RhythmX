@@ -1,33 +1,27 @@
-//
 //  Event.swift
-//  Lunar
-//
 //  Created by user on 9/27/24.
-//
 
 import Foundation
 
 struct Event: Identifiable {
     enum EventType: String, Identifiable, CaseIterable {
-        case work, home, social, sport, health, unspecified
+        case menstrual, follicular, ovulation, luteal, unspecified
         var id: String {
             self.rawValue
         }
 
         var icon: String {
             switch self {
-            case .work:
-                return "🏦"
-            case .home:
-                return "🏡"
-            case .social:
-                return "🎉"
-            case .sport:
-                return "🥇"
-            case .health:
-                return "⚕️"
+            case .menstrual:
+                return "❶"
+            case .follicular:
+                return "❷"
+            case .ovulation:
+                return "❸"
+            case .luteal:
+                return "❹"
             case .unspecified:
-                return "📌"
+                return "☪︎"
             }
         }
     }
@@ -60,12 +54,11 @@ struct Event: Identifiable {
     // Data to be used in the preview
     static var sampleEvents: [Event] {
         return [
-            Event(eventType: .home, date: Date().diff(numDays: 0), note: "Take dog to groomers"),
             Event(date: Date().diff(numDays: -1), note: "Get gift for Emily"),
-            Event(eventType: .home, date: Date().diff(numDays: 6), note: "File tax returns."),
-            Event(eventType: .social, date: Date().diff(numDays: 2), note: "Dinner party at Dave and Janet's"),
-            Event(eventType: .work, date: Date().diff(numDays: -1), note: "Complete Audit."),
-            Event(eventType: .sport, date: Date().diff(numDays: -3), note: "Football Game"),
+            Event(eventType: .luteal, date: Date().diff(numDays: 6), note: "File tax returns."),
+            Event(eventType: .ovulation, date: Date().diff(numDays: 2), note: "Dinner party at Dave and Janet's"),
+            Event(eventType: .follicular, date: Date().diff(numDays: -1), note: "Complete Audit."),
+            Event(eventType: .menstrual, date: Date().diff(numDays: -3), note: "Football Game"),
             Event(date: Date().diff(numDays: -4), note: "Plan for winter vacation.")
         ]
     }

@@ -1,9 +1,5 @@
-//
 //  ListViewRow.swift
-//  Lunar
-//
 //  Created by user on 9/27/24.
-//
 
 import SwiftUI
 
@@ -35,7 +31,7 @@ struct ListViewRow: View {
 }
 
  struct ListViewRow_Previews: PreviewProvider {
-     static let event = Event(eventType: .social, date: Date(), note: "Let's party")
+     static let event = Event(eventType: .menstrual, date: Date(), note: "Let's party")
     static var previews: some View {
         ListViewRow(event: event, formType: .constant(.new))
     }
