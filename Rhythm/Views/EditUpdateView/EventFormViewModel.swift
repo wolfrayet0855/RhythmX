@@ -1,6 +1,9 @@
+//
 //  EventFormViewModel.swift
+//
 
 import Foundation
+
 class EventFormViewModel: ObservableObject {
     @Published var date = Date()
     @Published var note = ""

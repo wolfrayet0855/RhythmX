@@ -1,5 +1,6 @@
+//
 //  EventFormView.swift
-
+//
 
 import SwiftUI
 
@@ -8,6 +9,7 @@ struct EventFormView: View {
     @StateObject var viewModel: EventFormViewModel
     @Environment(\.dismiss) var dismiss
     @FocusState private var focus: Bool?
+
     var body: some View {
         NavigationStack {
             VStack {
@@ -16,39 +18,44 @@ struct EventFormView: View {
                         Text("Date and Time")
                     }
                     Picker("Phase Type", selection: $viewModel.eventType) {
-                        ForEach(Event.EventType.allCases) {eventType in
+                        ForEach(Event.EventType.allCases) { eventType in
                             Text(eventType.icon + " " + eventType.rawValue.capitalized)
                                 .tag(eventType)
                         }
                     }
                     TextField("Note", text: $viewModel.note, axis: .vertical)
                         .focused($focus, equals: true)
+                    
                     Section(footer:
-                                HStack {
-                        Spacer()
-                        Button {
-                            if viewModel.updating {
-                                // update this event
-                                let event = Event(id: viewModel.id!,
-                                                  eventType: viewModel.eventType,
-                                                  date: viewModel.date,
-                                                  note: viewModel.note)
-                                eventStore.update(event)
-                            } else {
-                                // create new event
-                                let newEvent = Event(eventType: viewModel.eventType,
-                                                     date: viewModel.date,
-                                                     note: viewModel.note)
-                                eventStore.add(newEvent)
+                        HStack {
+                            Spacer()
+                            Button {
+                                if viewModel.updating {
+                                    // Update this event
+                                    let event = Event(
+                                        id: viewModel.id!,
+                                        eventType: viewModel.eventType,
+                                        date: viewModel.date,
+                                        note: viewModel.note
+                                    )
+                                    eventStore.update(event)
+                                } else {
+                                    // Create new event
+                                    let newEvent = Event(
+                                        eventType: viewModel.eventType,
+                                        date: viewModel.date,
+                                        note: viewModel.note
+                                    )
+                                    eventStore.add(newEvent)
+                                }
+                                dismiss()
+                            } label: {
+                                Text(viewModel.updating ? "Update Event" : "Add Event")
                             }
-                            dismiss()
-                        } label: {
-                            Text(viewModel.updating ? "Update Event" : "Add Event")
+                            .buttonStyle(.borderedProminent)
+                            .disabled(viewModel.incomplete)
+                            Spacer()
                         }
-                        .buttonStyle(.borderedProminent)
-                        .disabled(viewModel.incomplete)
-                        Spacer()
-                    }
                     ) {
                         EmptyView()
                     }

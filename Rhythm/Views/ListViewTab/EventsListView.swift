@@ -1,23 +1,25 @@
+//
 //  EventsListView.swift
-
+//
 
 import SwiftUI
 
 struct EventsListView: View {
     @EnvironmentObject var myEvents: EventStore
     @State private var formType: EventFormType?
+
     var body: some View {
         NavigationStack {
             List {
-                ForEach(myEvents.events.sorted {$0.date < $1.date }) { event in
+                ForEach(myEvents.events.sorted { $0.date < $1.date }) { event in
                     ListViewRow(event: event, formType: $formType)
-                    .swipeActions {
-                        Button(role: .destructive) {
-                            myEvents.delete(event)
-                        } label: {
-                            Image(systemName: "trash")
+                        .swipeActions {
+                            Button(role: .destructive) {
+                                myEvents.delete(event)
+                            } label: {
+                                Image(systemName: "trash")
+                            }
                         }
-                    }
                 }
             }
             .navigationTitle("Calendar Events")

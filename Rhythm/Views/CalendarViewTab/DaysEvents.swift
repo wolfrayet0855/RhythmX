@@ -1,5 +1,6 @@
+//
 //  DaysEvents.swift
-
+//
 
 import SwiftUI
 
@@ -12,8 +13,9 @@ struct DaysEventsListView: View {
         NavigationStack {
             Group {
                 if let dateSelected {
-                    let foundEvents = eventStore.events
-                        .filter {$0.date.startOfDay == dateSelected.date!.startOfDay}
+                    let foundEvents = eventStore.events.filter {
+                        $0.date.startOfDay == dateSelected.date?.startOfDay
+                    }
                     List {
                         ForEach(foundEvents) { event in
                             ListViewRow(event: event, formType: $formType)
@@ -29,7 +31,9 @@ struct DaysEventsListView: View {
                     }
                 }
             }
-            .navigationTitle(dateSelected?.date?.formatted(date: .long, time: .omitted) ?? "")
+            .navigationTitle(
+                dateSelected?.date?.formatted(date: .long, time: .omitted) ?? ""
+            )
         }
     }
 }
@@ -37,19 +41,16 @@ struct DaysEventsListView: View {
 struct DaysEventsListView_Previews: PreviewProvider {
     static var dateComponents: DateComponents {
         var dateComponents = Calendar.current.dateComponents(
-            [.month,
-             .day,
-             .year,
-             .hour,
-             .minute],
-            from: Date())
+            [.month, .day, .year, .hour, .minute],
+            from: Date()
+        )
         dateComponents.timeZone = TimeZone.current
         dateComponents.calendar = Calendar(identifier: .gregorian)
         return dateComponents
     }
+
     static var previews: some View {
         DaysEventsListView(dateSelected: .constant(dateComponents))
-            .environmentObject(EventStore(preview: true)
-            )
+            .environmentObject(EventStore(preview: true))
     }
 }

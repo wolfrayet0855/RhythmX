@@ -1,6 +1,6 @@
+//
 //  EventsCalendarView.swift
-
-
+//
 
 import SwiftUI
 
@@ -13,10 +13,12 @@ struct EventsCalendarView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                CalendarView(interval: DateInterval(start: .distantPast, end: .distantFuture),
-                             eventStore: eventStore,
-                             dateSelected: $dateSelected,
-                             displayEvents: $displayEvents)
+                CalendarView(
+                    interval: DateInterval(start: .distantPast, end: .distantFuture),
+                    eventStore: eventStore,
+                    dateSelected: $dateSelected,
+                    displayEvents: $displayEvents
+                )
                 Image("launchScreen")
                     .resizable()
                     .scaledToFit()
@@ -37,8 +39,7 @@ struct EventsCalendarView: View {
                 DaysEventsListView(dateSelected: $dateSelected)
                     .presentationDetents([.medium, .large])
             }
-            
-                .navigationTitle("Calendar View")
+            .navigationTitle("Calendar View")
         }
     }
 }

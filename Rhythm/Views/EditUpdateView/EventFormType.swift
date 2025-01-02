@@ -1,10 +1,13 @@
+//
 //  EventFormType.swift
+//
 
 import SwiftUI
 
 enum EventFormType: Identifiable, View {
     case new
     case update(Event)
+
     var id: String {
         switch self {
         case .new:

@@ -21,6 +21,7 @@
 		9A284FC52CA70A8D0021A785 /* EventsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FC42CA70A8D0021A785 /* EventsListView.swift */; };
 		9A284FC72CA70AB50021A785 /* ListViewRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FC62CA70AB50021A785 /* ListViewRow.swift */; };
 		9A284FC92CA70ADF0021A785 /* StartTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FC82CA70ADF0021A785 /* StartTabView.swift */; };
+		9A570D5F2D2708D800A025D8 /* SettingsCycleInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A570D5E2D2708CC00A025D8 /* SettingsCycleInfoView.swift */; };
 		9A6F3CB92CA717B1005D5328 /* Rhythm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6F3CB82CA717B1005D5328 /* Rhythm.swift */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +41,7 @@
 		9A284FC42CA70A8D0021A785 /* EventsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsListView.swift; sourceTree = "<group>"; };
 		9A284FC62CA70AB50021A785 /* ListViewRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewRow.swift; sourceTree = "<group>"; };
 		9A284FC82CA70ADF0021A785 /* StartTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartTabView.swift; sourceTree = "<group>"; };
+		9A570D5E2D2708CC00A025D8 /* SettingsCycleInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCycleInfoView.swift; sourceTree = "<group>"; };
 		9A6F3CB82CA717B1005D5328 /* Rhythm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rhythm.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -111,6 +113,7 @@
 		9A284FB32CA708C30021A785 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				9A570D5E2D2708CC00A025D8 /* SettingsCycleInfoView.swift */,
 				9A284FC32CA70A530021A785 /* ListViewTab */,
 				9A284FBB2CA7097E0021A785 /* EditUpdateView */,
 				9A284FB42CA708E20021A785 /* CalendarViewTab */,
@@ -220,6 +223,7 @@
 			files = (
 				9A284FB62CA7090A0021A785 /* CalendarView.swift in Sources */,
 				9A284FB82CA709390021A785 /* DaysEvents.swift in Sources */,
+				9A570D5F2D2708D800A025D8 /* SettingsCycleInfoView.swift in Sources */,
 				9A284FC92CA70ADF0021A785 /* StartTabView.swift in Sources */,
 				9A284FB02CA708630021A785 /* Event.swift in Sources */,
 				9A284FB22CA708930021A785 /* EventStore.swift in Sources */,
