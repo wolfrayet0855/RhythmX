@@ -1,3 +1,5 @@
+//CalendarView.swift
+
 import SwiftUI
 
 struct CalendarView: UIViewRepresentable {
@@ -13,6 +15,7 @@ struct CalendarView: UIViewRepresentable {
         uiCalendar.delegate = context.coordinator
         uiCalendar.calendar = Calendar(identifier: .gregorian)
         uiCalendar.availableDateRange = interval
+
         let dateSelection = UICalendarSelectionSingleDate(delegate: context.coordinator)
         uiCalendar.selectionBehavior = dateSelection
         return uiCalendar
@@ -20,19 +23,17 @@ struct CalendarView: UIViewRepresentable {
 
     func updateUIView(_ uiView: UICalendarView, context: Context) {
         if let changedEvent = eventStore.changedEvent {
-            uiView.reloadDecorations(
-                forDateComponents: [changedEvent.dateComponents],
-                animated: true
-            )
-            eventStore.changedEvent = nil
+            uiView.reloadDecorations(forDateComponents: [changedEvent.dateComponents], animated: true)
+            DispatchQueue.main.async {
+                eventStore.changedEvent = nil
+            }
         }
 
         if let movedEvent = eventStore.movedEvent {
-            uiView.reloadDecorations(
-                forDateComponents: [movedEvent.dateComponents],
-                animated: true
-            )
-            eventStore.movedEvent = nil
+            uiView.reloadDecorations(forDateComponents: [movedEvent.dateComponents], animated: true)
+            DispatchQueue.main.async {
+                eventStore.movedEvent = nil
+            }
         }
     }
 
@@ -47,9 +48,11 @@ struct CalendarView: UIViewRepresentable {
             self.parent = parent
         }
 
-        @MainActor func calendarView(_ calendarView: UICalendarView,
-                                     decorationFor dateComponents: DateComponents)
-        -> UICalendarView.Decoration? {
+        @MainActor func calendarView(
+            _ calendarView: UICalendarView,
+            decorationFor dateComponents: DateComponents
+        ) -> UICalendarView.Decoration? {
+            // Reading eventStore.events is OK now that EventStore is not actor-isolated
             let foundEvents = parent.eventStore.events.filter {
                 $0.date.startOfDay == dateComponents.date?.startOfDay
             }
@@ -73,8 +76,10 @@ struct CalendarView: UIViewRepresentable {
             return nil
         }
 
-        func dateSelection(_ selection: UICalendarSelectionSingleDate,
-                           didSelectDate dateComponents: DateComponents?) {
+        func dateSelection(
+            _ selection: UICalendarSelectionSingleDate,
+            didSelectDate dateComponents: DateComponents?
+        ) {
             DispatchQueue.main.async {
                 self.parent.dateSelected = dateComponents
                 guard let dateComponents else { return }
@@ -87,8 +92,10 @@ struct CalendarView: UIViewRepresentable {
             }
         }
 
-        func dateSelection(_ selection: UICalendarSelectionSingleDate,
-                           canSelectDate dateComponents: DateComponents?) -> Bool {
+        func dateSelection(
+            _ selection: UICalendarSelectionSingleDate,
+            canSelectDate dateComponents: DateComponents?
+        ) -> Bool {
             true
         }
     }
