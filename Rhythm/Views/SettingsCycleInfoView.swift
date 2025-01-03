@@ -8,8 +8,6 @@ struct SettingsCycleInfoView: View {
 
     @State private var selectedStartDate: Date = Date()
     @State private var selectedCycleLength: Int = 28
-
-    // Used to trigger the pop-up
     @State private var showCycleGeneratedAlert = false
 
     var body: some View {
@@ -28,14 +26,11 @@ struct SettingsCycleInfoView: View {
 
                 Section {
                     Button(action: {
-                        // Defer the actual operation to avoid publishing changes
                         DispatchQueue.main.async {
-                            // Clear out old events + create fresh ones
                             eventStore.generateCycleEvents(
                                 startDate: selectedStartDate,
                                 cycleLength: selectedCycleLength
                             )
-                            // Show the alert
                             showCycleGeneratedAlert = true
                         }
                     }) {
@@ -43,18 +38,20 @@ struct SettingsCycleInfoView: View {
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
+                } footer: {
+                    Text("This clears existing events and regenerates new dates for the upcoming cycle.")
                 }
-                footer: {
-                    Text("This removes any previously added events and regenerates new dates for the upcoming cycle.")
+
+                // NEW SECTION: Navigate to phases info
+                Section(header: Text("Menstrual Phases Info")) {
+                    NavigationLink("Learn more about phases") {
+                        PhasesFactsView()
+                    }
                 }
             }
             .navigationTitle("Settings")
-            // Show an alert after generating
-            .alert(
-                "Cycle Events Generated",
-                isPresented: $showCycleGeneratedAlert
-            ) {
-                Button("OK", role: .cancel) { }
+            .alert("Cycle Events Generated", isPresented: $showCycleGeneratedAlert) {
+                Button("OK", role: .cancel) {}
             }
         }
     }

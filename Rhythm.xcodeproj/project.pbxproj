@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9A23E0FF2D288DB7008A0B8A /* PhasesFactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A23E0FE2D288DB3008A0B8A /* PhasesFactsView.swift */; };
 		9A284F9E2CA701980021A785 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A284F9D2CA701980021A785 /* Assets.xcassets */; };
 		9A284FA12CA701980021A785 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A284FA02CA701980021A785 /* Preview Assets.xcassets */; };
 		9A284FAD2CA7082E0021A785 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FAC2CA7082E0021A785 /* Date+Extension.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9A23E0FE2D288DB3008A0B8A /* PhasesFactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhasesFactsView.swift; sourceTree = "<group>"; };
 		9A284F962CA701960021A785 /* Rhythm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rhythm.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A284F9D2CA701980021A785 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9A284FA02CA701980021A785 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 		9A284FB32CA708C30021A785 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				9A23E0FE2D288DB3008A0B8A /* PhasesFactsView.swift */,
 				9A570D5E2D2708CC00A025D8 /* SettingsCycleInfoView.swift */,
 				9A284FC32CA70A530021A785 /* ListViewTab */,
 				9A284FBB2CA7097E0021A785 /* EditUpdateView */,
@@ -231,6 +234,7 @@
 				9A284FC52CA70A8D0021A785 /* EventsListView.swift in Sources */,
 				9A284FC72CA70AB50021A785 /* ListViewRow.swift in Sources */,
 				9A284FBF2CA709D80021A785 /* EventFormView.swift in Sources */,
+				9A23E0FF2D288DB7008A0B8A /* PhasesFactsView.swift in Sources */,
 				9A6F3CB92CA717B1005D5328 /* Rhythm.swift in Sources */,
 				9A284FBD2CA709AE0021A785 /* EventFormType.swift in Sources */,
 				9A284FAD2CA7082E0021A785 /* Date+Extension.swift in Sources */,
