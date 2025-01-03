@@ -31,7 +31,6 @@ struct EventFormView: View {
                             Spacer()
                             Button {
                                 if viewModel.updating {
-                                    // Update this event
                                     let event = Event(
                                         id: viewModel.id!,
                                         eventType: viewModel.eventType,
@@ -40,7 +39,6 @@ struct EventFormView: View {
                                     )
                                     eventStore.update(event)
                                 } else {
-                                    // Create new event
                                     let newEvent = Event(
                                         eventType: viewModel.eventType,
                                         date: viewModel.date,

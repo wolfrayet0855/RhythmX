@@ -11,7 +11,7 @@ class EventStore: ObservableObject {
     @Published var changedEvent: Event?
     @Published var movedEvent: Event?
 
-    // MARK: - Cycle Info (could be persisted in real app)
+    // MARK: - Cycle Info
     @Published var lastMenstrualDate: Date?
     @Published var cycleLength: Int = 28
 
@@ -22,10 +22,12 @@ class EventStore: ObservableObject {
 
     func fetchEvents() {
         if preview {
+            // Show sample data in preview mode
             events = Event.sampleEvents
         } else {
-            // Load from your persistent store if needed
-            events = []
+            // For now, also load sample events in non-preview
+            // so the list isn't blank at startup.
+            events = Event.sampleEvents
         }
     }
 
@@ -51,38 +53,47 @@ class EventStore: ObservableObject {
     }
 
     /// Generates a simple cycle of phase events for the user.
-    /// Adjust the day ranges or logic to match your ideal lengths per phase.
+    /// This now only removes existing events in the new cycle's date range
+    /// to avoid duplication. Tweak date ranges as needed for your real logic.
     func generateCycleEvents(startDate: Date, cycleLength: Int = 28) {
-        // For simplicity, remove existing events in this demonstration.
-        // In a real app, you might want to handle merges or confirmations.
-        events.removeAll()
-
-        // Store the lastMenstrualDate and cycleLength
+        // Store the user inputs in the model
         lastMenstrualDate = startDate
         self.cycleLength = cycleLength
 
-        // Example phases (days are inclusive):
-        //  Menstrual: Day 0...4
-        //  Follicular: Day 5...12
-        //  Ovulation: Day 13...15
-        //  Luteal: Day 16...26
-        //  Introspection: Day 27...(cycleLength-1)
+        // End date is startDate + cycleLength
+        guard let endDate = Calendar.current.date(
+            byAdding: .day,
+            value: cycleLength,
+            to: startDate
+        ) else { return }
 
+        // Remove existing events that fall within [startDate, endDate)
+        events.removeAll { event in
+            (event.date >= startDate) && (event.date < endDate)
+        }
+
+        // Example phases
         let phases: [(Event.EventType, Range<Int>)] = [
-            (.menstrual, 0..<5),
-            (.follicular, 5..<13),
-            (.ovulation, 13..<16),
-            (.luteal, 16..<27),
-            (.introspection, 27..<cycleLength)
+            (.menstrual, 0..<5),      // Day 1-5
+            (.follicular, 5..<13),    // Day 6-13
+            (.ovulation, 13..<16),    // Day 14-16
+            (.luteal, 16..<27),       // Day 17-27
+            (.introspection, 27..<cycleLength)  // Day 28-(cycleLength)
         ]
 
+        // Build events for each day in each phase
         for (phaseType, dayRange) in phases {
             for offset in dayRange {
-                guard let phaseDate = Calendar.current.date(byAdding: .day, value: offset, to: startDate) else { continue }
+                guard let phaseDate = Calendar.current.date(
+                    byAdding: .day,
+                    value: offset,
+                    to: startDate
+                ) else { continue }
+
                 let event = Event(
                     eventType: phaseType,
                     date: phaseDate,
-                    note: "\(phaseType.rawValue.capitalized) Day \(offset+1)"
+                    note: "\(phaseType.rawValue.capitalized) Day \(offset + 1)"
                 )
                 add(event)
             }

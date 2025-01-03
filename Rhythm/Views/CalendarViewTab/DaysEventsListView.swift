@@ -1,5 +1,5 @@
 //
-//  DaysEvents.swift
+//  DaysEventsListView.swift
 //
 
 import SwiftUI
@@ -8,7 +8,7 @@ struct DaysEventsListView: View {
     @EnvironmentObject var eventStore: EventStore
     @Binding var dateSelected: DateComponents?
     @State private var formType: EventFormType?
-    
+
     var body: some View {
         NavigationStack {
             Group {
@@ -32,7 +32,10 @@ struct DaysEventsListView: View {
                 }
             }
             .navigationTitle(
-                dateSelected?.date?.formatted(date: .long, time: .omitted) ?? ""
+                dateSelected?.date?.formatted(
+                    date: .long,
+                    time: .omitted
+                ) ?? ""
             )
         }
     }

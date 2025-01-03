@@ -9,7 +9,7 @@ struct EventsCalendarView: View {
     @State private var dateSelected: DateComponents?
     @State private var displayEvents = false
     @State private var formType: EventFormType?
-    
+
     var body: some View {
         NavigationStack {
             ScrollView {

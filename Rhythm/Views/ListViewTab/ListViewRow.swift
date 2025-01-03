@@ -41,7 +41,7 @@ struct ListViewRow_Previews: PreviewProvider {
         date: Date(),
         note: "Let's party"
     )
-    
+
     static var previews: some View {
         ListViewRow(event: event, formType: .constant(.new))
     }

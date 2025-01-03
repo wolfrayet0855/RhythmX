@@ -1,20 +1,15 @@
 //
 //  SettingsCycleInfoView.swift
-//  Rhythm
 //
-//  Created by user on 1/2/25.
-//
-
 
 import SwiftUI
 
 struct SettingsCycleInfoView: View {
     @EnvironmentObject var eventStore: EventStore
 
-    // Defaults to "today" for the last menstrual date
     @State private var selectedStartDate: Date = Date()
     @State private var selectedCycleLength: Int = 28
-    
+
     var body: some View {
         NavigationStack {
             Form {
@@ -24,29 +19,31 @@ struct SettingsCycleInfoView: View {
                         selection: $selectedStartDate,
                         displayedComponents: .date
                     )
-                    
                     Stepper(value: $selectedCycleLength, in: 20...40) {
                         Text("Cycle Length: \(selectedCycleLength) days")
                     }
                 }
 
                 Section {
-                    Button(action: generateCycle) {
+                    Button(action: {
+                        // Wrap in main queue to avoid "Publishing changes from within view updates" warnings
+                        DispatchQueue.main.async {
+                            eventStore.generateCycleEvents(
+                                startDate: selectedStartDate,
+                                cycleLength: selectedCycleLength
+                            )
+                        }
+                    }) {
                         Text("Generate Cycle Events")
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
                 } footer: {
-                    Text("This replaces any existing events with new ones representing your phases for the next cycle.")
+                    Text("This removes any pre-existing cycle events in the upcoming \(selectedCycleLength) days, then generates brand new ones.")
                 }
             }
             .navigationTitle("Settings")
         }
-    }
-    
-    private func generateCycle() {
-        eventStore.generateCycleEvents(startDate: selectedStartDate,
-                                       cycleLength: selectedCycleLength)
     }
 }
 
