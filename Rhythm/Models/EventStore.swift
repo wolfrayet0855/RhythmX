@@ -16,10 +16,8 @@ class EventStore: ObservableObject {
         fetchEvents()
     }
 
-    /// In a real app, load from disk or a database. For now, keep empty or test data.
     func fetchEvents() {
         if preview {
-            // For a quick preview, you could add sample data. We'll keep empty here:
             events = []
         } else {
             events = []
@@ -45,9 +43,7 @@ class EventStore: ObservableObject {
         }
     }
     
-    /// Example function to generate a cycle of events for demonstration
     func generateCycleEvents(startDate: Date, cycleLength: Int = 28) {
-        // Clear existing events to illustrate new cycle
         events.removeAll()
 
         let phases: [(Event.EventType, Range<Int>)] = [
@@ -71,5 +67,10 @@ class EventStore: ObservableObject {
             }
         }
     }
+    
+    /// Fetch historical events based on selected time range
+    func fetchHistoricalEvents(for range: TimeInterval) -> [Event] {
+        let startDate = Date().addingTimeInterval(-range)
+        return events.filter { $0.date >= startDate }
+    }
 }
-
