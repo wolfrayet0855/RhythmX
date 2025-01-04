@@ -1,5 +1,8 @@
-//
+
 //  ListViewRow.swift
+//  Rhythm
+//
+//  Created by user on 9/27/24.
 //
 
 import SwiftUI
@@ -19,7 +22,7 @@ struct ListViewRow: View {
                 Text(event.date.formatted(date: .abbreviated, time: .shortened))
                     .font(.subheadline)
                     .foregroundColor(.secondary)
-                
+
                 if !event.tags.isEmpty {
                     Text("Tags: \(event.tags)")
                         .font(.footnote)
@@ -28,6 +31,7 @@ struct ListViewRow: View {
             }
             Spacer()
             Button("Edit") {
+                // We only allow updating now
                 formType = .update(event)
             }
             .buttonStyle(.bordered)
@@ -43,6 +47,7 @@ struct ListViewRow_Previews: PreviewProvider {
         tags: "cramping, chocolate"
     )
     static var previews: some View {
-        ListViewRow(event: sampleEvent, formType: .constant(.new))
+        // Removed the .new case; only .update is possible
+        ListViewRow(event: sampleEvent, formType: .constant(.update(sampleEvent)))
     }
 }

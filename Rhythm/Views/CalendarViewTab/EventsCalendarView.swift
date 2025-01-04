@@ -8,7 +8,8 @@ struct EventsCalendarView: View {
     @EnvironmentObject var eventStore: EventStore
     @State private var dateSelected: DateComponents?
     @State private var displayEvents = false
-    @State private var formType: EventFormType?
+    // Remove formType and the plus button altogether
+    // @State private var formType: EventFormType?
 
     var body: some View {
         NavigationStack {
@@ -24,17 +25,7 @@ struct EventsCalendarView: View {
                     .scaledToFit()
                     .frame(width: 100)
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        formType = .new
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .imageScale(.medium)
-                    }
-                }
-            }
-            .sheet(item: $formType) { $0 }
+            // Removed toolbar with "plus.circle.fill"
             .sheet(isPresented: $displayEvents) {
                 DaysEventsListView(dateSelected: $dateSelected)
                     .presentationDetents([.medium, .large])

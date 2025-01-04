@@ -5,15 +5,15 @@ import SwiftUI
 
 struct EventsListView: View {
     @EnvironmentObject var myEvents: EventStore
-    @State private var formType: EventFormType?
+    // Remove the formType for creating new events
+    // @State private var formType: EventFormType?
 
     var body: some View {
         NavigationStack {
             List {
-                // Group events by eventType (the 4 phases)
+                // Group events by eventType (the phases)
                 let grouped = Dictionary(grouping: myEvents.events) { $0.eventType }
 
-                // We iterate over each known phase in order:
                 ForEach(Event.EventType.allCases, id: \.self) { phase in
                     if let phaseEvents = grouped[phase], !phaseEvents.isEmpty {
                         Section {
@@ -43,18 +43,6 @@ struct EventsListView: View {
                                         Image(systemName: "trash")
                                     }
                                 }
-
-                                // Optionally show each event in that phase if you want more details:
-                                // ForEach(sorted) { e in
-                                //     ListViewRow(event: e, formType: $formType)
-                                //         .swipeActions {
-                                //             Button(role: .destructive) {
-                                //                 myEvents.delete(e)
-                                //             } label: {
-                                //                 Image(systemName: "trash")
-                                //             }
-                                //         }
-                                // }
                             }
                         } header: {
                             Text("\(phase.rawValue.capitalized) Phase")
@@ -63,17 +51,18 @@ struct EventsListView: View {
                 }
             }
             .navigationTitle("Calendar Events")
-            .sheet(item: $formType) { $0 }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        formType = .new
-                    } label: {
-                        Image(systemName: "plus.circle.fill")
-                            .imageScale(.medium)
-                    }
-                }
-            }
+            // Remove .sheet(item: $formType) and remove toolbar button
+            // .sheet(item: $formType) { $0 }
+            // .toolbar {
+            //     ToolbarItem(placement: .navigationBarTrailing) {
+            //         Button {
+            //             formType = .new
+            //         } label: {
+            //             Image(systemName: "plus.circle.fill")
+            //                 .imageScale(.medium)
+            //         }
+            //     }
+            // }
         }
     }
 

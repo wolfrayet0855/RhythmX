@@ -26,7 +26,6 @@ struct EventFormView: View {
                     TextField("Note", text: $viewModel.note, axis: .vertical)
                         .focused($focus, equals: true)
 
-                    // Freeform tags
                     TextField("Custom Tags (freeform)", text: $viewModel.tags)
                         .focused($focus, equals: false)
 
@@ -34,6 +33,7 @@ struct EventFormView: View {
                         HStack {
                             Spacer()
                             Button {
+                                // Only allow "update" scenario
                                 if viewModel.updating {
                                     let updated = Event(
                                         id: viewModel.id!,
@@ -43,21 +43,17 @@ struct EventFormView: View {
                                         tags: viewModel.tags
                                     )
                                     eventStore.update(updated)
+                                    dismiss()
                                 } else {
-                                    let newEvent = Event(
-                                        eventType: viewModel.eventType,
-                                        date: viewModel.date,
-                                        note: viewModel.note,
-                                        tags: viewModel.tags
-                                    )
-                                    eventStore.add(newEvent)
+                                    // NO-OP (ignore attempts to add brand-new event)
+                                    // Or you could show an alert, but we simply do nothing
                                 }
-                                dismiss()
                             } label: {
-                                Text(viewModel.updating ? "Update Event" : "Add Event")
+                                Text("Update Event")
                             }
                             .buttonStyle(.borderedProminent)
-                            .disabled(viewModel.incomplete)
+                            // If not updating, disable the button to prevent adding
+                            .disabled(!viewModel.updating || viewModel.incomplete)
                             Spacer()
                         }
                     ) {
@@ -65,7 +61,7 @@ struct EventFormView: View {
                     }
                 }
             }
-            .navigationTitle(viewModel.updating ? "Update" : "New Event")
+            .navigationTitle("Edit Event")
             .onAppear {
                 focus = true
             }
@@ -75,7 +71,14 @@ struct EventFormView: View {
 
 struct EventFormView_Previews: PreviewProvider {
     static var previews: some View {
-        EventFormView(viewModel: EventFormViewModel())
+        // Provide an event so we're "updating"
+        let sampleEvent = Event(
+            eventType: .menstrual,
+            date: Date(),
+            note: "Sample edit",
+            tags: "example"
+        )
+        EventFormView(viewModel: EventFormViewModel(sampleEvent))
             .environmentObject(EventStore())
     }
 }
