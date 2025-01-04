@@ -32,7 +32,10 @@ struct SettingsCycleInfoView: View {
                 }
 
                 // Generate Cycle Events Section
-                Section {
+                Section(
+                    header: Text("Generate Events"),
+                    footer: Text("This clears existing events and regenerates new dates for the upcoming cycle.")
+                ) {
                     Button(action: {
                         DispatchQueue.main.async {
                             eventStore.generateCycleEvents(
@@ -46,12 +49,13 @@ struct SettingsCycleInfoView: View {
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
-                } footer: {
-                    Text("This clears existing events and regenerates new dates for the upcoming cycle.")
                 }
 
                 // Archive Section
-                Section(header: Text("Archive Data")) {
+                Section(
+                    header: Text("Archive Data"),
+                    footer: Text("Archiving will save the existing events. New events will need to be regenerated.")
+                ) {
                     Button(action: {
                         archiveCurrentData()
                     }) {
