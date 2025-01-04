@@ -61,7 +61,6 @@
 		9A284F8D2CA701960021A785 = {
 			isa = PBXGroup;
 			children = (
-				9A6F3CB82CA717B1005D5328 /* Rhythm.swift */,
 				9A284F982CA701960021A785 /* Rhythm */,
 				9A284F972CA701960021A785 /* Products */,
 			);
@@ -78,6 +77,7 @@
 		9A284F982CA701960021A785 /* Rhythm */ = {
 			isa = PBXGroup;
 			children = (
+				9A6F3CB82CA717B1005D5328 /* Rhythm.swift */,
 				9A284FB32CA708C30021A785 /* Views */,
 				9A284FAE2CA708510021A785 /* Models */,
 				9A284FAB2CA7080A0021A785 /* Extensions */,
