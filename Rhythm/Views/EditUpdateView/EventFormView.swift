@@ -14,35 +14,41 @@ struct EventFormView: View {
         NavigationStack {
             VStack {
                 Form {
-                    DatePicker(selection: $viewModel.date) {
-                        Text("Date and Time")
-                    }
+                    DatePicker("Date and Time", selection: $viewModel.date)
+                    
                     Picker("Phase Type", selection: $viewModel.eventType) {
-                        ForEach(Event.EventType.allCases) { eventType in
-                            Text(eventType.icon + " " + eventType.rawValue.capitalized)
-                                .tag(eventType)
+                        ForEach(Event.EventType.allCases) { et in
+                            Text(et.icon + " " + et.rawValue.capitalized)
+                                .tag(et)
                         }
                     }
+
                     TextField("Note", text: $viewModel.note, axis: .vertical)
                         .focused($focus, equals: true)
-                    
+
+                    // Freeform tags
+                    TextField("Custom Tags (freeform)", text: $viewModel.tags)
+                        .focused($focus, equals: false)
+
                     Section(footer:
                         HStack {
                             Spacer()
                             Button {
                                 if viewModel.updating {
-                                    let event = Event(
+                                    let updated = Event(
                                         id: viewModel.id!,
                                         eventType: viewModel.eventType,
                                         date: viewModel.date,
-                                        note: viewModel.note
+                                        note: viewModel.note,
+                                        tags: viewModel.tags
                                     )
-                                    eventStore.update(event)
+                                    eventStore.update(updated)
                                 } else {
                                     let newEvent = Event(
                                         eventType: viewModel.eventType,
                                         date: viewModel.date,
-                                        note: viewModel.note
+                                        note: viewModel.note,
+                                        tags: viewModel.tags
                                     )
                                     eventStore.add(newEvent)
                                 }

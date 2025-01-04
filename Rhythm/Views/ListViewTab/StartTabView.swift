@@ -13,12 +13,10 @@ struct StartTabView: View {
                 .tabItem {
                     Label("List", systemImage: "list.triangle")
                 }
-
             EventsCalendarView()
                 .tabItem {
                     Label("Calendar", systemImage: "calendar")
                 }
-
             SettingsCycleInfoView()
                 .tabItem {
                     Label("Settings", systemImage: "gearshape.fill")

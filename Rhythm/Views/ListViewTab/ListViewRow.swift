@@ -14,21 +14,21 @@ struct ListViewRow: View {
                 HStack {
                     Text(event.eventType.icon)
                         .font(.system(size: 40))
-                    Text(
-                        event.eventType.rawValue.capitalized.hasPrefix("Introspection")
-                        ? event.eventType.rawValue.capitalized
-                        : "\(event.eventType.rawValue.capitalized) Phase"
-                    )
+                    Text("\(event.eventType.rawValue.capitalized) Phase")
                 }
-                Text(
-                    event.date.formatted(date: .abbreviated, time: .shortened)
-                )
+                Text(event.date.formatted(date: .abbreviated, time: .shortened))
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                
+                if !event.tags.isEmpty {
+                    Text("Tags: \(event.tags)")
+                        .font(.footnote)
+                        .foregroundColor(.blue)
+                }
             }
             Spacer()
-            Button {
+            Button("Edit") {
                 formType = .update(event)
-            } label: {
-                Text("Edit")
             }
             .buttonStyle(.bordered)
         }
@@ -36,13 +36,13 @@ struct ListViewRow: View {
 }
 
 struct ListViewRow_Previews: PreviewProvider {
-    static let event = Event(
+    static let sampleEvent = Event(
         eventType: .menstrual,
         date: Date(),
-        note: "Let's party"
+        note: "Example note",
+        tags: "cramping, chocolate"
     )
-
     static var previews: some View {
-        ListViewRow(event: event, formType: .constant(.new))
+        ListViewRow(event: sampleEvent, formType: .constant(.new))
     }
 }

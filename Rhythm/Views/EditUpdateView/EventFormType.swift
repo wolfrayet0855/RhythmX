@@ -10,10 +10,8 @@ enum EventFormType: Identifiable, View {
 
     var id: String {
         switch self {
-        case .new:
-            return "new"
-        case .update:
-            return "update"
+        case .new:            return "new"
+        case .update:         return "update"
         }
     }
 
@@ -21,8 +19,8 @@ enum EventFormType: Identifiable, View {
         switch self {
         case .new:
             EventFormView(viewModel: EventFormViewModel())
-        case .update(let event):
-            EventFormView(viewModel: EventFormViewModel(event))
+        case .update(let e):
+            EventFormView(viewModel: EventFormViewModel(e))
         }
     }
 }
