@@ -79,7 +79,6 @@
 		9A284F982CA701960021A785 /* Rhythm */ = {
 			isa = PBXGroup;
 			children = (
-				9A23E1062D29C252008A0B8A /* ArchivedDataView.swift */,
 				9A6F3CB82CA717B1005D5328 /* Rhythm.swift */,
 				9A284FB32CA708C30021A785 /* Views */,
 				9A284FAE2CA708510021A785 /* Models */,
@@ -118,6 +117,7 @@
 		9A284FB32CA708C30021A785 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				9A23E1062D29C252008A0B8A /* ArchivedDataView.swift */,
 				9A23E0FE2D288DB3008A0B8A /* PhasesFactsView.swift */,
 				9A570D5E2D2708CC00A025D8 /* SettingsCycleInfoView.swift */,
 				9A284FC32CA70A530021A785 /* ListViewTab */,
