@@ -73,4 +73,4 @@ We believe in the power of open-source collaboration. Feel free to:
 4. Open a Pull Request describing your work and its benefits.
 We encourage adding new features, translations, UI improvements, and more.
 
-Let’s make this project a powerful tool for all users!
+Happy coding 🚀!
