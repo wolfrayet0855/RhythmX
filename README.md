@@ -51,7 +51,7 @@
 
 1. **Clone**:  
    ```bash
-   git clone https://github.com/YourUsername/Rhythm.git
+   git clone https://github.com/wolfrayet0855/Rhythm.git
    cd Rhythm
 
 2. **Open & Install**:
