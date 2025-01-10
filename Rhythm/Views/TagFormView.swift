@@ -1,4 +1,4 @@
-///
+//
 //  TagFormView.swift
 //
 
@@ -19,7 +19,9 @@ struct TagFormView: View {
     @State private var category: TagCategory = .food
     @State private var customType: String = ""
     @State private var tagDate = Date()
-    @State private var isAllDay = false
+    
+    /// No toggle anymore; we always do "all day"
+    private let isAllDay = true
 
     var body: some View {
         NavigationStack {
@@ -32,9 +34,8 @@ struct TagFormView: View {
 
                 TextField("Specific Type (e.g. chocolate)", text: $customType)
 
+                // DatePicker for date only
                 DatePicker("Date", selection: $tagDate, displayedComponents: .date)
-
-                Toggle("All Day?", isOn: $isAllDay)
             }
             .navigationTitle("Add a New Tag")
             .toolbar {
@@ -54,40 +55,24 @@ struct TagFormView: View {
     }
 
     private func saveTag() {
-        // Build the new tag: "Food:chocolate" (example)
+        // e.g. "Food:chocolate" if customType == "chocolate"
         let newTag = "\(category.rawValue):\(customType.isEmpty ? "unspecified" : customType)"
 
+        // We'll always compare ignoring the time
         let targetStartOfDay = tagDate.startOfDay
 
         for event in myEvents.events {
             let eventStartOfDay = event.date.startOfDay
 
-            if isAllDay {
-                // Compare ignoring time
-                if eventStartOfDay == targetStartOfDay {
-                    var updated = event
-                    if updated.tags.isEmpty {
-                        updated.tags = newTag
-                    } else {
-                        updated.tags += ", \(newTag)"
-                    }
-                    myEvents.update(updated)
+            // If the event is on the same day, attach the tag
+            if eventStartOfDay == targetStartOfDay {
+                var updated = event
+                if updated.tags.isEmpty {
+                    updated.tags = newTag
+                } else {
+                    updated.tags += ", \(newTag)"
                 }
-            } else {
-                // Compare exact day/hour/minute
-                let sameDay = Calendar.current.isDate(event.date, inSameDayAs: tagDate)
-                let sameHour = Calendar.current.component(.hour, from: event.date) == Calendar.current.component(.hour, from: tagDate)
-                let sameMinute = Calendar.current.component(.minute, from: event.date) == Calendar.current.component(.minute, from: tagDate)
-
-                if sameDay && sameHour && sameMinute {
-                    var updated = event
-                    if updated.tags.isEmpty {
-                        updated.tags = newTag
-                    } else {
-                        updated.tags += ", \(newTag)"
-                    }
-                    myEvents.update(updated)
-                }
+                myEvents.update(updated)
             }
         }
     }
