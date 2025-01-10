@@ -108,4 +108,3 @@ struct SettingsCycleInfoView_Previews: PreviewProvider {
             .environmentObject(EventStore(preview: true))
     }
 }
-

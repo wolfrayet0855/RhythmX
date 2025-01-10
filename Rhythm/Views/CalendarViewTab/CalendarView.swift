@@ -1,4 +1,6 @@
-//CalendarView.swift
+//
+//  CalendarView.swift
+//
 
 import SwiftUI
 
@@ -52,7 +54,6 @@ struct CalendarView: UIViewRepresentable {
             _ calendarView: UICalendarView,
             decorationFor dateComponents: DateComponents
         ) -> UICalendarView.Decoration? {
-            // Reading eventStore.events is OK now that EventStore is not actor-isolated
             let foundEvents = parent.eventStore.events.filter {
                 $0.date.startOfDay == dateComponents.date?.startOfDay
             }

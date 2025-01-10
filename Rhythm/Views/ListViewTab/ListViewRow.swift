@@ -1,4 +1,5 @@
 
+//
 //  ListViewRow.swift
 //  Rhythm
 //
@@ -31,7 +32,6 @@ struct ListViewRow: View {
             }
             Spacer()
             Button("Edit") {
-                // We only allow updating now
                 formType = .update(event)
             }
             .buttonStyle(.bordered)
@@ -47,7 +47,6 @@ struct ListViewRow_Previews: PreviewProvider {
         tags: "cramping, chocolate"
     )
     static var previews: some View {
-        // Removed the .new case; only .update is possible
         ListViewRow(event: sampleEvent, formType: .constant(.update(sampleEvent)))
     }
 }

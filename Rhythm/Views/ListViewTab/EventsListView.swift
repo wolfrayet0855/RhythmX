@@ -1,13 +1,15 @@
 //
 //  EventsListView.swift
 //
+
 import SwiftUI
 
 struct EventsListView: View {
     @EnvironmentObject var myEvents: EventStore
-    // Remove the formType for creating new events
-    // @State private var formType: EventFormType?
-
+    
+    // We will show a TagFormView in a sheet
+    @State private var showTagForm = false
+    
     var body: some View {
         NavigationStack {
             List {
@@ -32,11 +34,22 @@ struct EventsListView: View {
                                         )
                                         .font(.subheadline)
                                         .foregroundColor(.secondary)
+                                        
+                                        // Combine all tags from events in this phase (optional)
+                                        let combinedTags = sorted
+                                            .map { $0.tags }
+                                            .filter { !$0.isEmpty }
+                                            .joined(separator: ", ")
+                                        if !combinedTags.isEmpty {
+                                            Text("Tags: \(combinedTags)")
+                                                .font(.footnote)
+                                                .foregroundColor(.blue)
+                                        }
                                     }
                                     Spacer()
                                 }
                                 .swipeActions {
-                                    // Delete all events in this phase, if desired
+                                    // Delete all events in this phase
                                     Button(role: .destructive) {
                                         deleteAll(phaseEvents)
                                     } label: {
@@ -51,18 +64,20 @@ struct EventsListView: View {
                 }
             }
             .navigationTitle("Calendar Events")
-            // Remove .sheet(item: $formType) and remove toolbar button
-            // .sheet(item: $formType) { $0 }
-            // .toolbar {
-            //     ToolbarItem(placement: .navigationBarTrailing) {
-            //         Button {
-            //             formType = .new
-            //         } label: {
-            //             Image(systemName: "plus.circle.fill")
-            //                 .imageScale(.medium)
-            //         }
-            //     }
-            // }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showTagForm.toggle()
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                            .imageScale(.medium)
+                    }
+                }
+            }
+            // Present the TagFormView as a sheet
+            .sheet(isPresented: $showTagForm) {
+                TagFormView()
+            }
         }
     }
 

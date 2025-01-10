@@ -23,6 +23,7 @@
 		9A284FC52CA70A8D0021A785 /* EventsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FC42CA70A8D0021A785 /* EventsListView.swift */; };
 		9A284FC72CA70AB50021A785 /* ListViewRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FC62CA70AB50021A785 /* ListViewRow.swift */; };
 		9A284FC92CA70ADF0021A785 /* StartTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A284FC82CA70ADF0021A785 /* StartTabView.swift */; };
+		9A4747F52D30B52B00BB7C72 /* TagFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A4747F42D30B52600BB7C72 /* TagFormView.swift */; };
 		9A570D5F2D2708D800A025D8 /* SettingsCycleInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A570D5E2D2708CC00A025D8 /* SettingsCycleInfoView.swift */; };
 		9A6F3CB92CA717B1005D5328 /* Rhythm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A6F3CB82CA717B1005D5328 /* Rhythm.swift */; };
 /* End PBXBuildFile section */
@@ -45,6 +46,7 @@
 		9A284FC42CA70A8D0021A785 /* EventsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsListView.swift; sourceTree = "<group>"; };
 		9A284FC62CA70AB50021A785 /* ListViewRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewRow.swift; sourceTree = "<group>"; };
 		9A284FC82CA70ADF0021A785 /* StartTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartTabView.swift; sourceTree = "<group>"; };
+		9A4747F42D30B52600BB7C72 /* TagFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagFormView.swift; sourceTree = "<group>"; };
 		9A570D5E2D2708CC00A025D8 /* SettingsCycleInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCycleInfoView.swift; sourceTree = "<group>"; };
 		9A6F3CB82CA717B1005D5328 /* Rhythm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rhythm.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -117,6 +119,7 @@
 		9A284FB32CA708C30021A785 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				9A4747F42D30B52600BB7C72 /* TagFormView.swift */,
 				9A23E1062D29C252008A0B8A /* ArchivedDataView.swift */,
 				9A23E0FE2D288DB3008A0B8A /* PhasesFactsView.swift */,
 				9A570D5E2D2708CC00A025D8 /* SettingsCycleInfoView.swift */,
@@ -236,6 +239,7 @@
 				9A284FBA2CA709610021A785 /* EventsCalendarView.swift in Sources */,
 				9A284FC52CA70A8D0021A785 /* EventsListView.swift in Sources */,
 				9A284FC72CA70AB50021A785 /* ListViewRow.swift in Sources */,
+				9A4747F52D30B52B00BB7C72 /* TagFormView.swift in Sources */,
 				9A284FBF2CA709D80021A785 /* EventFormView.swift in Sources */,
 				9A23E0FF2D288DB7008A0B8A /* PhasesFactsView.swift in Sources */,
 				9A6F3CB92CA717B1005D5328 /* Rhythm.swift in Sources */,

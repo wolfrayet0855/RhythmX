@@ -46,13 +46,11 @@ struct EventFormView: View {
                                     dismiss()
                                 } else {
                                     // NO-OP (ignore attempts to add brand-new event)
-                                    // Or you could show an alert, but we simply do nothing
                                 }
                             } label: {
                                 Text("Update Event")
                             }
                             .buttonStyle(.borderedProminent)
-                            // If not updating, disable the button to prevent adding
                             .disabled(!viewModel.updating || viewModel.incomplete)
                             Spacer()
                         }

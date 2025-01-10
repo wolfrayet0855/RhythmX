@@ -3,6 +3,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 @MainActor
 class EventStore: ObservableObject {
@@ -16,6 +17,7 @@ class EventStore: ObservableObject {
         fetchEvents()
     }
 
+    /// Example "fetch" that sets events to empty if in preview
     func fetchEvents() {
         if preview {
             events = []
@@ -24,15 +26,16 @@ class EventStore: ObservableObject {
         }
     }
 
+    // MARK: - CRUD
+    func add(_ newEvent: Event) {
+        events.append(newEvent)
+        changedEvent = newEvent
+    }
+
     func delete(_ event: Event) {
         if let idx = events.firstIndex(where: { $0.id == event.id }) {
             changedEvent = events.remove(at: idx)
         }
-    }
-
-    func add(_ newEvent: Event) {
-        events.append(newEvent)
-        changedEvent = newEvent
     }
 
     func update(_ event: Event) {
@@ -42,10 +45,10 @@ class EventStore: ObservableObject {
             changedEvent = event
         }
     }
-    
+
+    // MARK: - Generate cycle events
     func generateCycleEvents(startDate: Date, cycleLength: Int = 28) {
         events.removeAll()
-
         let phases: [(Event.EventType, Range<Int>)] = [
             (.menstrual,   0..<5),
             (.follicular,  5..<13),
@@ -59,18 +62,18 @@ class EventStore: ObservableObject {
                     let e = Event(
                         eventType: phaseType,
                         date: phaseDate,
-                        note: "\(phaseType.rawValue.capitalized) day \(offset+1)",
-                        tags: ""
+                        note: "\(phaseType.rawValue.capitalized) day \(offset+1)"
                     )
                     add(e)
                 }
             }
         }
     }
-    
-    /// Fetch historical events based on selected time range
+
+    // Optional: fetch historical events
     func fetchHistoricalEvents(for range: TimeInterval) -> [Event] {
         let startDate = Date().addingTimeInterval(-range)
         return events.filter { $0.date >= startDate }
     }
 }
+
