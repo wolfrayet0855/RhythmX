@@ -1,3 +1,7 @@
+//
+//  SettingsCycleInfoView.swift
+//
+
 import SwiftUI
 
 struct SettingsCycleInfoView: View {
@@ -12,6 +16,31 @@ struct SettingsCycleInfoView: View {
     var body: some View {
         NavigationStack {
             Form {
+                // -- User Note Section with a standard header
+                Section(header: Text("System Note")) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            // First line: "Add new tags"
+                            HStack {
+                                Text("Add new tags in")
+                                    .foregroundColor(.black)
+                                Image(systemName: "list.bullet")
+                                    .foregroundColor(.black)
+                                Text("list view")
+                            }
+                            // Second line: "Edit tags"
+                            HStack {
+                                Text("Edit tags in")
+                                    .foregroundColor(.black)
+                                Image(systemName: "calendar")
+                                    .foregroundColor(.black)
+                                Text("calendar view")
+                            }
+                        }
+                        .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+
                 // Menstrual Phases Info Section
                 Section(header: Text("Menstrual Phases Info")) {
                     NavigationLink("Learn more about phases") {
@@ -108,3 +137,4 @@ struct SettingsCycleInfoView_Previews: PreviewProvider {
             .environmentObject(EventStore(preview: true))
     }
 }
+
