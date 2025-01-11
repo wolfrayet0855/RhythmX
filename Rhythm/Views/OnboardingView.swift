@@ -1,20 +1,26 @@
+//
+//  OnboardingView.swift
+//
+
 import SwiftUI
 
 struct OnboardingView: View {
-    @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var myEvents: EventStore
     @AppStorage("didFinishOnboarding") var didFinishOnboarding = false
+    @AppStorage("selectedTab") var selectedTab = 0
+
+    // Toggling this to true will push GettingStartedView onto this NavStack
+    @State private var navigateToGetStarted = false
 
     var body: some View {
-        // A simple multi-step or single-step onboarding
-        TabView {
-            // Page 1
-            VStack(spacing: 20) {
+        NavigationStack {
+            VStack(spacing: 24) {
                 Text("Welcome to Rhythm!")
                     .font(.largeTitle)
                     .bold()
                     .padding(.top, 40)
 
-                Text("Generate cycle events, track daily tags, and learn about phases.")
+                Text("Generate cycle events, track tags, and learn about phases.")
                     .font(.headline)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
@@ -22,19 +28,40 @@ struct OnboardingView: View {
                 Image(systemName: "circlebadge.2.fill")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 100)
+                    .frame(width: 80)
+                    .padding(.bottom, 24)
 
-                Button("Get Started") {
-                    didFinishOnboarding = true
+                // "Continue" goes to GettingStartedView (back button is not hidden)
+                Button("Continue") {
+                    navigateToGetStarted = true
                 }
                 .buttonStyle(.borderedProminent)
                 .padding(.bottom, 40)
             }
             .padding()
-
-            // Optional: Page 2, 3, etc. if you want a multi-page onboarding
-            // ...
+            .navigationTitle("Onboarding")
+            // A "Skip" or "Done" approach in the top-right, if user doesn't want to see steps
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Skip") {
+                        // Let user skip everything, set onboarding done,
+                        // and jump them to the Settings tab if you like
+                        selectedTab = 2
+                        didFinishOnboarding = true
+                    }
+                }
+            }
+            // Push to GettingStartedView
+            .navigationDestination(isPresented: $navigateToGetStarted) {
+                GettingStartedView()
+            }
         }
-        .tabViewStyle(.page)
+    }
+}
+
+struct OnboardingView_Previews: PreviewProvider {
+    static var previews: some View {
+        OnboardingView()
+            .environmentObject(EventStore())
     }
 }

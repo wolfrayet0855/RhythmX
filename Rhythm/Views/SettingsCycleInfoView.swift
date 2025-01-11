@@ -1,4 +1,4 @@
-//
+///
 //  SettingsCycleInfoView.swift
 //
 
@@ -16,28 +16,10 @@ struct SettingsCycleInfoView: View {
     var body: some View {
         NavigationStack {
             Form {
-                // -- User Note Section with a standard header
-                Section(header: Text("System Note")) {
-                    VStack(alignment: .leading, spacing: 8) {
-                        VStack(alignment: .leading, spacing: 4) {
-                            // First line: "Add new tags"
-                            HStack {
-                                Text("Add new tags in")
-                                    .foregroundColor(.black)
-                                Image(systemName: "list.bullet")
-                                    .foregroundColor(.black)
-                                Text("list view")
-                            }
-                            // Second line: "Edit tags"
-                            HStack {
-                                Text("Edit tags in")
-                                    .foregroundColor(.black)
-                                Image(systemName: "calendar")
-                                    .foregroundColor(.black)
-                                Text("calendar view")
-                            }
-                        }
-                        .fixedSize(horizontal: false, vertical: true)
+                // -- "Getting Started" Section
+                Section(header: Text("Getting Started")) {
+                    NavigationLink("Let’s Get Started") {
+                        GettingStartedView()
                     }
                 }
 
@@ -108,7 +90,6 @@ struct SettingsCycleInfoView: View {
         }
     }
 
-    // Archive the current data and group it incrementally
     private func archiveCurrentData() {
         let currentEvents = eventStore.events
         guard !currentEvents.isEmpty else { return }
@@ -119,8 +100,6 @@ struct SettingsCycleInfoView: View {
 
         // Add the grouped events to archived data with the current date
         groupedArchivedData.append((Date(), groupedEvents))
-
-        // Sort archives by date (most recent first)
         groupedArchivedData.sort { $0.0 > $1.0 }
 
         // Clear current events (optional, depending on business logic)
@@ -137,4 +116,3 @@ struct SettingsCycleInfoView_Previews: PreviewProvider {
             .environmentObject(EventStore(preview: true))
     }
 }
-

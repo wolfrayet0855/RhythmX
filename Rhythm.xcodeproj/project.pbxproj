@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9A0F1FC42D32BF4C00746E99 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0F1FC32D32BF4C00746E99 /* OnboardingView.swift */; };
+		9A0F1FC82D32C3A900746E99 /* GettingStartedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A0F1FC72D32C3A900746E99 /* GettingStartedView.swift */; };
 		9A23E0FF2D288DB7008A0B8A /* PhasesFactsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A23E0FE2D288DB3008A0B8A /* PhasesFactsView.swift */; };
 		9A23E1072D29C256008A0B8A /* ArchivedDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A23E1062D29C252008A0B8A /* ArchivedDataView.swift */; };
 		9A284F9E2CA701980021A785 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A284F9D2CA701980021A785 /* Assets.xcassets */; };
@@ -29,6 +31,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9A0F1FC32D32BF4C00746E99 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		9A0F1FC72D32C3A900746E99 /* GettingStartedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GettingStartedView.swift; sourceTree = "<group>"; };
 		9A23E0FE2D288DB3008A0B8A /* PhasesFactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhasesFactsView.swift; sourceTree = "<group>"; };
 		9A23E1062D29C252008A0B8A /* ArchivedDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedDataView.swift; sourceTree = "<group>"; };
 		9A284F962CA701960021A785 /* Rhythm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rhythm.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -119,6 +123,8 @@
 		9A284FB32CA708C30021A785 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				9A0F1FC72D32C3A900746E99 /* GettingStartedView.swift */,
+				9A0F1FC32D32BF4C00746E99 /* OnboardingView.swift */,
 				9A4747F42D30B52600BB7C72 /* TagFormView.swift */,
 				9A23E1062D29C252008A0B8A /* ArchivedDataView.swift */,
 				9A23E0FE2D288DB3008A0B8A /* PhasesFactsView.swift */,
@@ -232,6 +238,7 @@
 			files = (
 				9A284FB62CA7090A0021A785 /* CalendarView.swift in Sources */,
 				9A284FB82CA709390021A785 /* DaysEventsListView.swift in Sources */,
+				9A0F1FC82D32C3A900746E99 /* GettingStartedView.swift in Sources */,
 				9A570D5F2D2708D800A025D8 /* SettingsCycleInfoView.swift in Sources */,
 				9A284FC92CA70ADF0021A785 /* StartTabView.swift in Sources */,
 				9A284FB02CA708630021A785 /* Event.swift in Sources */,
@@ -241,6 +248,7 @@
 				9A284FC72CA70AB50021A785 /* ListViewRow.swift in Sources */,
 				9A4747F52D30B52B00BB7C72 /* TagFormView.swift in Sources */,
 				9A284FBF2CA709D80021A785 /* EventFormView.swift in Sources */,
+				9A0F1FC42D32BF4C00746E99 /* OnboardingView.swift in Sources */,
 				9A23E0FF2D288DB7008A0B8A /* PhasesFactsView.swift in Sources */,
 				9A6F3CB92CA717B1005D5328 /* Rhythm.swift in Sources */,
 				9A23E1072D29C256008A0B8A /* ArchivedDataView.swift in Sources */,
