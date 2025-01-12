@@ -1,4 +1,4 @@
-///
+//
 //  SettingsCycleInfoView.swift
 //
 
@@ -11,7 +11,16 @@ struct SettingsCycleInfoView: View {
     @State private var selectedCycleLength: Int = 28
     @State private var showCycleGeneratedAlert = false
     @State private var showArchivedAlert = false
-    @State private var groupedArchivedData: [(Date, [(Event.EventType, [Event])])] = []
+
+    // MARK: - Archived Data
+    @State private var groupedArchivedData: [ArchivedDataBlock] = []
+    private let archivedDataKey = "com.example.rhythm.archivedData"
+
+    // MARK: - Lifecycle
+    init() {
+        // We can’t do this in @State declarations; do it here or in .onAppear
+        loadArchivedData()
+    }
 
     var body: some View {
         NavigationStack {
@@ -90,29 +99,68 @@ struct SettingsCycleInfoView: View {
         }
     }
 
+    // MARK: - Archiving
     private func archiveCurrentData() {
         let currentEvents = eventStore.events
         guard !currentEvents.isEmpty else { return }
 
         // Group events by phase
-        let groupedEvents = Dictionary(grouping: currentEvents) { $0.eventType }
+        let grouped = Dictionary(grouping: currentEvents) { $0.eventType }
             .sorted { $0.key.rawValue < $1.key.rawValue }
+            .map { (key, events) in
+                ArchivedDataBlock.PhaseEvents(eventType: key, events: events)
+            }
 
-        // Add the grouped events to archived data with the current date
-        groupedArchivedData.append((Date(), groupedEvents))
-        groupedArchivedData.sort { $0.0 > $1.0 }
+        // Build a new ArchivedDataBlock
+        let newBlock = ArchivedDataBlock(
+            id: UUID(),
+            date: Date(),
+            groupedEvents: grouped
+        )
 
-        // Clear current events (optional, depending on business logic)
+        // Append & sort newest at the top
+        groupedArchivedData.append(newBlock)
+        groupedArchivedData.sort { $0.date > $1.date }
+
+        // Clear current events (optional, depending on your business logic)
         eventStore.events.removeAll()
+
+        // Persist archived data
+        saveArchivedData()
 
         // Show success alert
         showArchivedAlert = true
     }
-}
 
-struct SettingsCycleInfoView_Previews: PreviewProvider {
-    static var previews: some View {
-        SettingsCycleInfoView()
-            .environmentObject(EventStore(preview: true))
+    private func loadArchivedData() {
+        guard let data = UserDefaults.standard.data(forKey: archivedDataKey) else { return }
+        do {
+            let decoded = try JSONDecoder().decode([ArchivedDataBlock].self, from: data)
+            groupedArchivedData = decoded
+        } catch {
+            print("Error decoding archived data: \(error)")
+        }
+    }
+
+    private func saveArchivedData() {
+        do {
+            let data = try JSONEncoder().encode(groupedArchivedData)
+            UserDefaults.standard.set(data, forKey: archivedDataKey)
+        } catch {
+            print("Error encoding archived data: \(error)")
+        }
     }
 }
+
+// MARK: - ArchivedDataBlock definition
+struct ArchivedDataBlock: Codable, Identifiable {
+    let id: UUID
+    let date: Date
+    let groupedEvents: [PhaseEvents]
+
+    struct PhaseEvents: Codable {
+        let eventType: Event.EventType
+        let events: [Event]
+    }
+}
+

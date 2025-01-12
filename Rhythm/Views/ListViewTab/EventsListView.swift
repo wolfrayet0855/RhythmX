@@ -63,7 +63,7 @@ struct EventsListView: View {
                     }
                 }
             }
-            .navigationTitle("Event List")
+            .navigationTitle("Events List")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {

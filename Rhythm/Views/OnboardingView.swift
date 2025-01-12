@@ -39,7 +39,7 @@ struct OnboardingView: View {
                 .padding(.bottom, 40)
             }
             .padding()
-            .navigationTitle("Onboarding")
+            .navigationTitle("Rhythm Onboarding")
             // A "Skip" or "Done" approach in the top-right, if user doesn't want to see steps
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {

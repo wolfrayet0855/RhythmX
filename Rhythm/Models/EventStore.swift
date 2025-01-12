@@ -12,17 +12,21 @@ class EventStore: ObservableObject {
     @Published var changedEvent: Event?
     @Published var movedEvent: Event?
 
+    // Key for storing current events in UserDefaults
+    private let eventsKey = "com.example.rhythm.events"
+
     init(preview: Bool = false) {
         self.preview = preview
         fetchEvents()
     }
 
-    /// Example "fetch" that sets events to empty if in preview
+    /// Load from UserDefaults (or provide empty if in preview)
     func fetchEvents() {
         if preview {
+            // For preview, you might not want to load anything
             events = []
         } else {
-            events = []
+            loadFromUserDefaults()
         }
     }
 
@@ -30,11 +34,13 @@ class EventStore: ObservableObject {
     func add(_ newEvent: Event) {
         events.append(newEvent)
         changedEvent = newEvent
+        saveToUserDefaults()
     }
 
     func delete(_ event: Event) {
         if let idx = events.firstIndex(where: { $0.id == event.id }) {
             changedEvent = events.remove(at: idx)
+            saveToUserDefaults()
         }
     }
 
@@ -43,6 +49,7 @@ class EventStore: ObservableObject {
             movedEvent = events[idx]
             events[idx] = event
             changedEvent = event
+            saveToUserDefaults()
         }
     }
 
@@ -64,10 +71,13 @@ class EventStore: ObservableObject {
                         date: phaseDate,
                         note: "\(phaseType.rawValue.capitalized) day \(offset+1)"
                     )
-                    add(e)
+                    events.append(e)
                 }
             }
         }
+        // Because we appended directly in the loop,
+        // we must call save after generation is done:
+        saveToUserDefaults()
     }
 
     // Optional: fetch historical events
@@ -75,5 +85,26 @@ class EventStore: ObservableObject {
         let startDate = Date().addingTimeInterval(-range)
         return events.filter { $0.date >= startDate }
     }
-}
 
+    // MARK: - Persistence
+    private func saveToUserDefaults() {
+        do {
+            let data = try JSONEncoder().encode(events)
+            UserDefaults.standard.set(data, forKey: eventsKey)
+        } catch {
+            print("Error encoding events: \(error)")
+        }
+    }
+
+    private func loadFromUserDefaults() {
+        guard let data = UserDefaults.standard.data(forKey: eventsKey) else {
+            return
+        }
+        do {
+            let decoded = try JSONDecoder().decode([Event].self, from: data)
+            self.events = decoded
+        } catch {
+            print("Error decoding events: \(error)")
+        }
+    }
+}
