@@ -1,4 +1,3 @@
-//
 //  GettingStartedView.swift
 //
 
@@ -24,9 +23,13 @@ struct GettingStartedView: View {
                     .font(.headline)
                 Text("In the ‘Calendar’ tab, see your phases & events. Tap a date to view/edit tags.")
 
-                Text("4) Learn More")
+                Text("4) Archive Data")
                     .font(.headline)
-                Text("In Settings, open ‘Menstrual Phases Info’ for details on each phase. ")
+                Text("Each month in Settings, archive your previous data and generate new menstrual phase events. Use the Archive Data view to explore trends in your tags.")
+
+                Text("5) Learn More")
+                    .font(.headline)
+                Text("In Settings, open ‘Menstrual Phases Info’ for details on each phase.")
             }
             .padding()
         }
