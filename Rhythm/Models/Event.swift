@@ -59,38 +59,15 @@ struct Event: Identifiable, Codable {
     }
 }
 
-// MARK: - Sample Events & MenstrualCycle helper
+// MARK: - Sample Events
 extension Event {
     static var sampleEvents: [Event] {
         return [
-            Event(eventType: .menstrual,     date: Date(),                     note: "Menstrual phase",     tags: ""),
-            Event(eventType: .follicular,    date: Date().addingTimeInterval(86400),   note: "Follicular phase",    tags: ""),
-            Event(eventType: .ovulation,     date: Date().addingTimeInterval(172800),  note: "Ovulation phase",     tags: ""),
-            Event(eventType: .luteal,        date: Date().addingTimeInterval(259200),  note: "Luteal phase",        tags: ""),
-            Event(eventType: .introspection, date: Date().addingTimeInterval(345600),  note: "Introspection phase", tags: "")
+            Event(eventType: .menstrual, date: Date(), note: "Menstrual phase", tags: ""),
+            Event(eventType: .follicular, date: Date().addingTimeInterval(86400), note: "Follicular phase", tags: ""),
+            Event(eventType: .ovulation, date: Date().addingTimeInterval(172800), note: "Ovulation phase", tags: ""),
+            Event(eventType: .luteal, date: Date().addingTimeInterval(259200), note: "Luteal phase", tags: ""),
+            Event(eventType: .introspection, date: Date().addingTimeInterval(345600), note: "Introspection phase", tags: "")
         ]
     }
 }
-
-struct MenstrualCycle {
-    static func calculateMenstrualPhases(startDate: String, cycleLength: Int) -> [Event] {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        guard let start = dateFormatter.date(from: startDate) else { return [] }
-
-        let ovulationDay = cycleLength - 14
-        guard let ovulationDate = Calendar.current.date(byAdding: .day, value: ovulationDay, to: start) else { return [] }
-        guard let follicularEndDate = Calendar.current.date(byAdding: .day, value: -1, to: ovulationDate) else { return [] }
-        let lutealStartDate = ovulationDate
-        guard let lutealEndDate = Calendar.current.date(byAdding: .day, value: cycleLength - 1, to: start) else { return [] }
-
-        return [
-            Event(eventType: .follicular, date: start,           note: "Follicular start"),
-            Event(eventType: .follicular, date: follicularEndDate, note: "Follicular end"),
-            Event(eventType: .ovulation,  date: ovulationDate,   note: "Ovulation"),
-            Event(eventType: .luteal,     date: lutealStartDate, note: "Luteal start"),
-            Event(eventType: .luteal,     date: lutealEndDate,   note: "Luteal end")
-        ]
-    }
-}
-

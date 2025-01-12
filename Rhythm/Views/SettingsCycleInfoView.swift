@@ -18,7 +18,6 @@ struct SettingsCycleInfoView: View {
 
     // MARK: - Lifecycle
     init() {
-        // We can’t do this in @State declarations; do it here or in .onAppear
         loadArchivedData()
     }
 
@@ -56,7 +55,7 @@ struct SettingsCycleInfoView: View {
                     header: Text("Generate Events"),
                     footer: Text("This clears existing events and regenerates new dates for the upcoming cycle.")
                 ) {
-                    Button(action: {
+                    Button {
                         DispatchQueue.main.async {
                             eventStore.generateCycleEvents(
                                 startDate: selectedStartDate,
@@ -64,7 +63,7 @@ struct SettingsCycleInfoView: View {
                             )
                             showCycleGeneratedAlert = true
                         }
-                    }) {
+                    } label: {
                         Text("Generate Cycle Events")
                             .frame(maxWidth: .infinity)
                     }
@@ -76,16 +75,23 @@ struct SettingsCycleInfoView: View {
                     header: Text("Archive Data"),
                     footer: Text("Archiving will save the existing events. New events will need to be regenerated.")
                 ) {
-                    Button(action: {
+                    Button {
                         archiveCurrentData()
-                    }) {
+                    } label: {
                         Text("Archive Current Data")
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
 
                     NavigationLink("View Archived Data") {
-                        ArchivedDataView(groupedArchivedData: groupedArchivedData)
+                        // Pass a binding + a closure to clear the archive
+                        ArchivedDataView(
+                            groupedArchivedData: $groupedArchivedData
+                        ) {
+                            // Clear all blocks from memory + from disk
+                            groupedArchivedData.removeAll()
+                            saveArchivedData()
+                        }
                     }
                 }
             }
@@ -111,9 +117,8 @@ struct SettingsCycleInfoView: View {
                 ArchivedDataBlock.PhaseEvents(eventType: key, events: events)
             }
 
-        // Build a new ArchivedDataBlock
+        // Build a new ArchivedDataBlock (auto-generates id)
         let newBlock = ArchivedDataBlock(
-            id: UUID(),
             date: Date(),
             groupedEvents: grouped
         )
@@ -122,7 +127,7 @@ struct SettingsCycleInfoView: View {
         groupedArchivedData.append(newBlock)
         groupedArchivedData.sort { $0.date > $1.date }
 
-        // Clear current events (optional, depending on your business logic)
+        // Clear current events (optional)
         eventStore.events.removeAll()
 
         // Persist archived data
@@ -151,16 +156,3 @@ struct SettingsCycleInfoView: View {
         }
     }
 }
-
-// MARK: - ArchivedDataBlock definition
-struct ArchivedDataBlock: Codable, Identifiable {
-    let id: UUID
-    let date: Date
-    let groupedEvents: [PhaseEvents]
-
-    struct PhaseEvents: Codable {
-        let eventType: Event.EventType
-        let events: [Event]
-    }
-}
-

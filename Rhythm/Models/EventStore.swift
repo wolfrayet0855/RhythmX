@@ -23,7 +23,6 @@ class EventStore: ObservableObject {
     /// Load from UserDefaults (or provide empty if in preview)
     func fetchEvents() {
         if preview {
-            // For preview, you might not want to load anything
             events = []
         } else {
             loadFromUserDefaults()
@@ -75,8 +74,7 @@ class EventStore: ObservableObject {
                 }
             }
         }
-        // Because we appended directly in the loop,
-        // we must call save after generation is done:
+        // save after generation
         saveToUserDefaults()
     }
 
