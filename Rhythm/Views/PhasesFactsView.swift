@@ -4,6 +4,7 @@
 //
 //  Created by user on 1/3/25.
 //
+
 import SwiftUI
 
 /// A simple container for the entire text of one phase block.
@@ -130,6 +131,16 @@ Tracking symptoms can help identify patterns and better manage the physical and 
                         .background(Color(uiColor: .secondarySystemBackground))
                         .cornerRadius(8)
                     }
+                    
+                    // Fun, lighthearted disclaimer at the bottom
+                    Spacer().frame(height: 24)
+                    Text("""
+Disclaimer: The information above is for your general knowledge and educational purposes – not a substitute for professional medical advice! Always consult a doctor if you have any health concerns. Keep grooving, stay informed, and remember: your body is unique, and we're just here to help you find your rhythm.
+""")
+                        .font(.footnote)
+                        .multilineTextAlignment(.center)
+                        .foregroundColor(.secondary)
+                        .padding(.horizontal)
                 }
                 .padding()
             }
