@@ -1,4 +1,3 @@
-//
 //  OnboardingView.swift
 //
 
@@ -25,6 +24,13 @@ struct OnboardingView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
 
+                // High energy note about data privacy
+                Text("Your privacy rocks – we NEVER collect your data! Let's keep your rhythm free and safe!")
+                    .font(.subheadline)
+                    .foregroundColor(.black)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal)
+
                 Image(systemName: "circlebadge.2.fill")
                     .resizable()
                     .scaledToFit()
@@ -39,7 +45,7 @@ struct OnboardingView: View {
                 .padding(.bottom, 40)
             }
             .padding()
-            .navigationTitle("Rhythm Onboarding")
+    
             // A "Skip" or "Done" approach in the top-right, if user doesn't want to see steps
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
