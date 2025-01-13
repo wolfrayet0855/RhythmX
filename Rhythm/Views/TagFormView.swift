@@ -5,10 +5,11 @@
 import SwiftUI
 
 enum TagCategory: String, CaseIterable {
-    case emotion = "Emotion"
-    case food = "Food"
+    case dietary = "Dietary"
     case exercise = "Exercise"
     case medication = "Medication"
+    case mood = "Mood"
+    case symptom = "Symptom"
     case other = "Other"
 }
 
@@ -16,7 +17,7 @@ struct TagFormView: View {
     @EnvironmentObject var myEvents: EventStore
     @Environment(\.dismiss) var dismiss
 
-    @State private var category: TagCategory = .food
+    @State private var category: TagCategory = .dietary
     @State private var customType: String = ""
     @State private var tagDate = Date()
     
@@ -55,7 +56,7 @@ struct TagFormView: View {
     }
 
     private func saveTag() {
-        // e.g. "Food:chocolate" if customType == "chocolate"
+        // e.g. "Dietary:Chocolate" if customType == "chocolate"
         let newTag = "\(category.rawValue):\(customType.isEmpty ? "unspecified" : customType)"
 
         // We'll always compare ignoring the time

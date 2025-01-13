@@ -17,7 +17,7 @@ struct GettingStartedView: View {
 
                 Text("2) Add Tags")
                     .font(.headline)
-                Text("Use the ‘Events List’ tab to add new tags (e.g., cravings, emotions). Tap the plus (+) button to attach a tag to a date.")
+                Text("Use the ‘Events List’ tab to add new tags (e.g., Dietary, Mood). Tap the plus (+) button to attach a tag to a date.")
 
                 Text("3) Check Calendar")
                     .font(.headline)
