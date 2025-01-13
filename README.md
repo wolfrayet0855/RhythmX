@@ -10,7 +10,7 @@
   Record period start/end dates, flow levels, and cycle lengths.
 
 - **Symptom & Mood Tracking**  
-  Keep track of daily symptoms (e.g., cramps, bloating) and emotional changes.
+  Keep track of daily symptoms (e.g., cramps, bloating) and mood changes.
 
 - **Phase Insights**  
   Automatic detection of Menstrual, Follicular, Ovulatory, and Luteal phases, along with related tips, pregnancy probabilities, and mood expectations.
