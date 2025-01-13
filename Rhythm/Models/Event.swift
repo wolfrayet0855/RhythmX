@@ -11,7 +11,6 @@ struct Event: Identifiable, Codable {
         case follicular
         case ovulation
         case luteal
-        case introspection  // optional extra case if needed
 
         var id: String { rawValue }
 
@@ -21,7 +20,6 @@ struct Event: Identifiable, Codable {
             case .follicular:    return "❷"
             case .ovulation:     return "❸"
             case .luteal:        return "❹"
-            case .introspection: return "☪︎"
             }
         }
     }
