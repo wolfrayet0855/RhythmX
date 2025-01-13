@@ -67,7 +67,6 @@ extension Event {
             Event(eventType: .follicular, date: Date().addingTimeInterval(86400), note: "Follicular phase", tags: ""),
             Event(eventType: .ovulation, date: Date().addingTimeInterval(172800), note: "Ovulation phase", tags: ""),
             Event(eventType: .luteal, date: Date().addingTimeInterval(259200), note: "Luteal phase", tags: ""),
-            Event(eventType: .introspection, date: Date().addingTimeInterval(345600), note: "Introspection phase", tags: "")
         ]
     }
 }
