@@ -14,7 +14,7 @@ struct OnboardingView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 24) {
-                Text("Welcome to Rhythm!")
+                Text("Welcome to Rhythm(x)!")
                     .font(.largeTitle)
                     .bold()
                     .padding(.top, 40)

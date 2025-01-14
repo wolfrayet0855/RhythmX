@@ -37,7 +37,7 @@
 		9A0F1FC72D32C3A900746E99 /* GettingStartedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GettingStartedView.swift; sourceTree = "<group>"; };
 		9A23E0FE2D288DB3008A0B8A /* PhasesFactsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhasesFactsView.swift; sourceTree = "<group>"; };
 		9A23E1062D29C252008A0B8A /* ArchivedDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedDataView.swift; sourceTree = "<group>"; };
-		9A284F962CA701960021A785 /* Rhythm.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rhythm.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A284F962CA701960021A785 /* Rhythm(x).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Rhythm(x).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A284F9D2CA701980021A785 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9A284FA02CA701980021A785 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9A284FAC2CA7082E0021A785 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
@@ -79,7 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				9A0FE6982D355A1200E5BBDA /* License */,
-				9A284F982CA701960021A785 /* Rhythm */,
+				9A284F982CA701960021A785 /* Rhythm(x) */,
 				9A284F972CA701960021A785 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -87,12 +87,12 @@
 		9A284F972CA701960021A785 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				9A284F962CA701960021A785 /* Rhythm.app */,
+				9A284F962CA701960021A785 /* Rhythm(x).app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9A284F982CA701960021A785 /* Rhythm */ = {
+		9A284F982CA701960021A785 /* Rhythm(x) */ = {
 			isa = PBXGroup;
 			children = (
 				9AFE6AB12D35A5EA008C4512 /* LaunchScreen.storyboard */,
@@ -104,7 +104,7 @@
 				9A284F9D2CA701980021A785 /* Assets.xcassets */,
 				9A284F9F2CA701980021A785 /* Preview Content */,
 			);
-			path = Rhythm;
+			path = "Rhythm(x)";
 			sourceTree = "<group>";
 		};
 		9A284F9F2CA701980021A785 /* Preview Content */ = {
@@ -182,9 +182,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		9A284F952CA701960021A785 /* Rhythm */ = {
+		9A284F952CA701960021A785 /* Rhythm(x) */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 9A284FA42CA701980021A785 /* Build configuration list for PBXNativeTarget "Rhythm" */;
+			buildConfigurationList = 9A284FA42CA701980021A785 /* Build configuration list for PBXNativeTarget "Rhythm(x)" */;
 			buildPhases = (
 				9A284F922CA701960021A785 /* Sources */,
 				9A284F932CA701960021A785 /* Frameworks */,
@@ -194,9 +194,9 @@
 			);
 			dependencies = (
 			);
-			name = Rhythm;
+			name = "Rhythm(x)";
 			productName = Lunar;
-			productReference = 9A284F962CA701960021A785 /* Rhythm.app */;
+			productReference = 9A284F962CA701960021A785 /* Rhythm(x).app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -214,7 +214,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 9A284F912CA701960021A785 /* Build configuration list for PBXProject "Rhythm" */;
+			buildConfigurationList = 9A284F912CA701960021A785 /* Build configuration list for PBXProject "Rhythm(x)" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -227,7 +227,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				9A284F952CA701960021A785 /* Rhythm */,
+				9A284F952CA701960021A785 /* Rhythm(x) */,
 			);
 		};
 /* End PBXProject section */
@@ -403,12 +403,12 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"rhythm/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"rhythm(x)/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = P9Z5QB8965;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Rhythm/Info.plist;
+				INFOPLIST_FILE = "Rhythm(x)/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
@@ -441,12 +441,12 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"rhythm/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"rhythm(x)/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = P9Z5QB8965;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Rhythm/Info.plist;
+				INFOPLIST_FILE = "Rhythm(x)/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
@@ -474,7 +474,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		9A284F912CA701960021A785 /* Build configuration list for PBXProject "Rhythm" */ = {
+		9A284F912CA701960021A785 /* Build configuration list for PBXProject "Rhythm(x)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9A284FA22CA701980021A785 /* Debug */,
@@ -483,7 +483,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		9A284FA42CA701980021A785 /* Build configuration list for PBXNativeTarget "Rhythm" */ = {
+		9A284FA42CA701980021A785 /* Build configuration list for PBXNativeTarget "Rhythm(x)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				9A284FA52CA701980021A785 /* Debug */,

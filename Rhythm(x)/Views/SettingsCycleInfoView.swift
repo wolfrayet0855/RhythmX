@@ -14,7 +14,7 @@ struct SettingsCycleInfoView: View {
 
     // MARK: - Archived Data
     @State private var groupedArchivedData: [ArchivedDataBlock] = []
-    private let archivedDataKey = "com.example.rhythm.archivedData"
+    private let archivedDataKey = "com.example.rhythm(x).archivedData"
 
     // MARK: - Lifecycle
     init() {

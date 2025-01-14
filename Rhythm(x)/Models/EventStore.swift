@@ -13,7 +13,7 @@ class EventStore: ObservableObject {
     @Published var movedEvent: Event?
 
     // Key for storing current events in UserDefaults
-    private let eventsKey = "com.example.rhythm.events"
+    private let eventsKey = "com.example.rhythm(x).events"
 
     init(preview: Bool = false) {
         self.preview = preview
