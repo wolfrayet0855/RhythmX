@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "9A284F952CA701960021A785"
-               BuildableName = "Rhythm(x).app"
-               BlueprintName = "Rhythm(x)"
-               ReferencedContainer = "container:Rhythm(x).xcodeproj">
+               BuildableName = "RhythmX.app"
+               BlueprintName = "RhythmX"
+               ReferencedContainer = "container:RhythmX.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9A284F952CA701960021A785"
-            BuildableName = "Rhythm(x).app"
-            BlueprintName = "Rhythm(x)"
-            ReferencedContainer = "container:Rhythm(x).xcodeproj">
+            BuildableName = "RhythmX.app"
+            BlueprintName = "RhythmX"
+            ReferencedContainer = "container:RhythmX.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9A284F952CA701960021A785"
-            BuildableName = "Rhythm(x).app"
-            BlueprintName = "Rhythm(x)"
-            ReferencedContainer = "container:Rhythm(x).xcodeproj">
+            BuildableName = "RhythmX.app"
+            BlueprintName = "RhythmX"
+            ReferencedContainer = "container:RhythmX.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
