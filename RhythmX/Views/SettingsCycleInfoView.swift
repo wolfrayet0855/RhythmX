@@ -9,6 +9,7 @@ struct SettingsCycleInfoView: View {
 
     @State private var selectedStartDate: Date = Date()
     @State private var selectedCycleLength: Int = 28
+
     @State private var showCycleGeneratedAlert = false
     @State private var showArchivedAlert = false
 
@@ -40,11 +41,7 @@ struct SettingsCycleInfoView: View {
 
                 // Cycle Information Section
                 Section(header: Text("Cycle Information")) {
-                    DatePicker(
-                        "First Day of Current Cycle",
-                        selection: $selectedStartDate,
-                        displayedComponents: .date
-                    )
+                    DatePicker("First Day of Current Cycle", selection: $selectedStartDate, displayedComponents: .date)
                     Stepper(value: $selectedCycleLength, in: 20...40) {
                         Text("Cycle Length: \(selectedCycleLength) days")
                     }
@@ -56,13 +53,13 @@ struct SettingsCycleInfoView: View {
                     footer: Text("This clears existing events and regenerates new dates for the upcoming cycle.")
                 ) {
                     Button {
-                        DispatchQueue.main.async {
-                            eventStore.generateCycleEvents(
-                                startDate: selectedStartDate,
-                                cycleLength: selectedCycleLength
-                            )
-                            showCycleGeneratedAlert = true
-                        }
+                        // 1) Generate
+                        eventStore.generateCycleEvents(
+                            startDate: selectedStartDate,
+                            cycleLength: selectedCycleLength
+                        )
+                        // 2) Show alert
+                        showCycleGeneratedAlert = true
                     } label: {
                         Text("Generate Cycle Events")
                             .frame(maxWidth: .infinity)
@@ -84,7 +81,6 @@ struct SettingsCycleInfoView: View {
                     .buttonStyle(.borderedProminent)
 
                     NavigationLink("View Archived Data") {
-                        // Pass a binding + a closure to clear the archive
                         ArchivedDataView(
                             groupedArchivedData: $groupedArchivedData
                         ) {
@@ -96,47 +92,60 @@ struct SettingsCycleInfoView: View {
                 }
             }
             .navigationTitle("Settings")
+
+            // MARK: - ALERTS
             .alert("Cycle Events Generated", isPresented: $showCycleGeneratedAlert) {
-                Button("OK", role: .cancel) {}
+                Button("OK") {
+                    // Immediately reload to show new icons
+                    eventStore.reloadCalendarIcons()
+                }
             }
+
             .alert("Data Archived Successfully", isPresented: $showArchivedAlert) {
-                Button("OK", role: .cancel) {}
+                Button("OK") {
+                    // Immediately reload to remove icons
+                    eventStore.reloadCalendarIcons()
+                }
             }
         }
     }
 
     // MARK: - Archiving
     private func archiveCurrentData() {
-        let currentEvents = eventStore.events
-        guard !currentEvents.isEmpty else { return }
+        // If there are no events, do nothing
+        guard !eventStore.events.isEmpty else { return }
 
-        // Group events by phase
+        // 1) Gather existing events
+        let currentEvents = eventStore.events
+
+        // 2) Convert them into archived block(s)
         let grouped = Dictionary(grouping: currentEvents) { $0.eventType }
             .sorted { $0.key.rawValue < $1.key.rawValue }
             .map { (key, events) in
                 ArchivedDataBlock.PhaseEvents(eventType: key, events: events)
             }
 
-        // Build a new ArchivedDataBlock (auto-generates id)
         let newBlock = ArchivedDataBlock(
+            id: UUID(),
             date: Date(),
             groupedEvents: grouped
         )
 
-        // Append & sort newest at the top
+        // 3) Append to local archive list + sort (newest first)
         groupedArchivedData.append(newBlock)
         groupedArchivedData.sort { $0.date > $1.date }
 
-        // Clear current events (optional)
-        eventStore.events.removeAll()
+        // 4) Clear the current events from EventStore
+        eventStore.clearAllEvents()
 
-        // Persist archived data
+        // 5) Save the updated archive list
         saveArchivedData()
 
-        // Show success alert
+        // 6) Alert the user
         showArchivedAlert = true
     }
 
+    // MARK: - Persistence for Archives
     private func loadArchivedData() {
         guard let data = UserDefaults.standard.data(forKey: archivedDataKey) else { return }
         do {

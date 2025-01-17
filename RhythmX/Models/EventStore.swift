@@ -11,9 +11,12 @@ class EventStore: ObservableObject {
     @Published var preview: Bool
     @Published var changedEvent: Event?
     @Published var movedEvent: Event?
-
+    
     // Key for storing current events in UserDefaults
     private let eventsKey = "com.example.rhythm(x).events"
+
+    // MARK: - NEW: For immediate calendar reload
+    @Published var shouldReloadAll: Bool = false
 
     init(preview: Bool = false) {
         self.preview = preview
@@ -74,14 +77,24 @@ class EventStore: ObservableObject {
                 }
             }
         }
-        // save after generation
+        // Save after generation
         saveToUserDefaults()
+        // IMPORTANT: Do NOT flip `shouldReloadAll` here yet.
+        // We want it to reload only after user taps "OK" in the alert.
     }
 
     // Optional: fetch historical events
     func fetchHistoricalEvents(for range: TimeInterval) -> [Event] {
         let startDate = Date().addingTimeInterval(-range)
         return events.filter { $0.date >= startDate }
+    }
+
+    // MARK: - Clear All Events
+    /// Public helper that removes all events and immediately saves to UserDefaults.
+    func clearAllEvents() {
+        events.removeAll()
+        saveToUserDefaults()
+        // Also do NOT flip `shouldReloadAll` here; wait for "OK" in the alert.
     }
 
     // MARK: - Persistence
@@ -105,4 +118,10 @@ class EventStore: ObservableObject {
             print("Error decoding events: \(error)")
         }
     }
+
+    // MARK: - NEW: Force calendar to reload all icons
+    func reloadCalendarIcons() {
+        shouldReloadAll.toggle()
+    }
 }
+

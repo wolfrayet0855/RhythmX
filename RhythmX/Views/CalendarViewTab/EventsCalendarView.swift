@@ -18,6 +18,9 @@ struct EventsCalendarView: View {
                     dateSelected: $dateSelected,
                     displayEvents: $displayEvents
                 )
+                // KEY CHANGE: Force a full reload each time `eventStore.shouldReloadAll` toggles
+                .id(eventStore.shouldReloadAll)
+
                 Image("launchScreen")
                     .resizable()
                     .scaledToFit()
