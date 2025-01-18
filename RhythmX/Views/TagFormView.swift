@@ -33,9 +33,12 @@ struct TagFormView: View {
                     }
                 }
 
-                TextField("Specific Type (e.g. chocolate)", text: $customType)
-
-                // DatePicker for date only
+                //    any autocapitalization and allowing default keyboard (which includes emojis)
+                TextField("Specific Type (e.g. 🍫)", text: $customType)
+                    .textInputAutocapitalization(.words)
+                    .autocorrectionDisabled(false)
+                    .keyboardType(.default)
+                // 2) DatePicker for date only
                 DatePicker("Date", selection: $tagDate, displayedComponents: .date)
             }
             .navigationTitle("Add a New Tag")
@@ -56,16 +59,13 @@ struct TagFormView: View {
     }
 
     private func saveTag() {
-        // e.g. "Dietary:Chocolate" if customType == "chocolate"
+        // e.g. "Dietary:🍫" if the user typed "🍫"
         let newTag = "\(category.rawValue):\(customType.isEmpty ? "unspecified" : customType)"
 
-        // We'll always compare ignoring the time
         let targetStartOfDay = tagDate.startOfDay
 
         for event in myEvents.events {
             let eventStartOfDay = event.date.startOfDay
-
-            // If the event is on the same day, attach the tag
             if eventStartOfDay == targetStartOfDay {
                 var updated = event
                 if updated.tags.isEmpty {
@@ -78,3 +78,4 @@ struct TagFormView: View {
         }
     }
 }
+
