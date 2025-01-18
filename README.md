@@ -1,76 +1,84 @@
-# Menstrual Cycle Tracker (iOS)
+# Rhythm(x) – README
 
-**Rhythm** is an **open-source** iOS application built to help users log and understand their menstrual cycles. It provides concise, evidence-based insights on hormonal phases, fertility windows, and self-care strategies. We welcome community contributions and collaboration to enhance its features and reach.
-
----
-
-## Key Features
-
-- **Cycle Logging**  
-  Record period start/end dates, flow levels, and cycle lengths.
-
-- **Symptom & Mood Tracking**  
-  Keep track of daily symptoms (e.g., cramps, bloating) and mood changes.
-
-- **Phase Insights**  
-  Automatic detection of Menstrual, Follicular, Ovulatory, and Luteal phases, along with related tips, pregnancy probabilities, and mood expectations.
-
-- **Privacy & Security**  
-  Your data remains private, stored locally or synced securely (depending on your preferences).
+Welcome to **Rhythm(x)**, an iOS app that helps you track menstrual cycle phases, add freeform tags (like moods, dietary notes, etc.), and archive past cycles for future reference. Our goal is to make cycle tracking simpler and more intuitive—helping you spot patterns and stay in tune with your body.
 
 ---
 
-## Menstrual Phases (Quick Overview)
+## Overview
 
-1. **Menstrual (Days ~1–5)**  
-   - **Biology:** Low estrogen/progesterone trigger shedding of uterine lining.  
-   - **Pregnancy Probability:** Very low (but not zero).  
-   - **Common Symptoms:** Cramping, fatigue, irritability.  
-   - **Tips:** Light exercise, warm compresses, nutrient-rich foods.
+- **Generate Cycle Events**  
+  Pick a start date and cycle length; the app auto-creates events for the menstrual, follicular, ovulation, and luteal phases.
 
-2. **Follicular (Days ~1–13, overlaps with Menstrual)**
-   - **Biology:** Rising estrogen, follicles in the ovary mature, endometrium rebuilds.  
-   - **Pregnancy Probability:** Moderate, increasing as ovulation nears.  
-   - **Common Symptoms:** Improved mood, rising energy, possible boost in libido.  
-   - **Tips:** Higher-intensity workouts, tracking cervical mucus/ovulation kits.
+- **Tag Your Days**  
+  Add custom notes (e.g., dietary or exercise) to specific dates for more detailed tracking.
 
-3. **Ovulatory (Around Day ~14 in a 28-day cycle)**
-   - **Biology:** LH surge releases the egg; highest chance of conception.  
-   - **Pregnancy Probability:** Peak fertility window.  
-   - **Common Symptoms:** Elevated libido, mild pelvic twinges (Mittelschmerz).  
-   - **Tips:** Ideal time for conception; stay hydrated and pay attention to bodily cues.
+- **Calendar View**  
+  An interactive calendar (available on iOS 16+) shows icons for each phase or event. Tap any date to see more details.
 
-4. **Luteal (Days ~15–28)**
-   - **Biology:** Progesterone rises, preparing uterus for potential implantation.  
-   - **Pregnancy Probability:** Higher early on if fertilization occurs; declines otherwise.  
-   - **Common Symptoms:** Possible PMS (mood swings, bloating, breast tenderness).  
-   - **Tips:** Nutrient-dense diet, moderate exercise, stress management.
+- **Archive Past Cycles**  
+  Save completed cycles in “archives” so you can review them later, then generate fresh events for upcoming cycles.
 
 ---
+
+## Requirements
+
+- **iOS 16 or newer**  
+  This app uses Apple’s [`UICalendarView`](https://developer.apple.com/documentation/uikit/uicalendarview), introduced in iOS 16.
+
+- **Swift & SwiftUI**  
+  Requires SwiftUI and Xcode 14 or higher.
+
+---
+
 ## Getting Started
 
-1. **Clone**:  
-   ```bash
-   git clone https://github.com/wolfrayet0855/Rhythm.git
-   cd Rhythm
+1. **Clone or download** this repository.  
+2. **Open the project in Xcode 14+**.  
+3. **Run** on an iOS 16 simulator or device.
 
-2. **Open & Install**:
-- Open the project in Xcode (14.0+ recommended).
-- Install any dependencies (e.g., Swift Package Manager).
+On first launch, you’ll see the **Onboarding** screen. Follow the steps to learn how to generate cycle events and add tags, or skip straight to the main interface. Once in the app, use the **Settings** tab to generate your first cycle and dive into all the features.
 
-3. **Run**:
-- Select a simulator or device in Xcode.
-- Build and run.
+### Key Features
+
+- **Menstrual Phases Info**  
+  Learn detailed information about each phase in the dedicated phases view.
+
+- **Events List**  
+  Quickly review or bulk-delete events by phase.
+
+- **Calendar Integration**  
+  Tap any date to see all events or edit them right away.
+
+- **Archiving**  
+  When a cycle ends, archive the events to keep a permanent record, then clear the calendar to start anew.
 
 ---
-## Contributions:
 
-We believe in the power of open-source collaboration. Feel free to:
+## Contributing
 
-1. Fork this repository.
-2. Create a branch for new features or bug fixes.
-3. Commit and push your changes.
-4. Open a Pull Request describing your work and its benefits.
-We encourage adding new features, translations, UI improvements, and more.
+We welcome contributions of all kinds—bug reports, feature enhancements, or documentation improvements. Here’s how you can help:
 
-Happy coding 🚀!
+1. **Fork** this repo and create a feature branch.  
+2. Make your changes.  
+3. **Open a Pull Request** describing what you’ve done.  
+4. We’ll review and merge or suggest changes.
+
+---
+
+## Reporting Issues
+
+Encountered a bug or have a suggestion? Please open an **Issue** in this repository. Include:
+
+- Steps to reproduce the problem (if any)  
+- iOS version and device model  
+- Logs or screenshots to help illustrate the issue
+
+We’ll do our best to address it quickly.
+
+---
+
+## License
+
+This project is licensed under the [Apache License, Version 2.0](LICENSE). See the [LICENSE](LICENSE) file for details.
+
+
