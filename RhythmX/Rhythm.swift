@@ -6,7 +6,7 @@ import SwiftUI
 
 @main
 struct AppEntry: App {
-    @StateObject var myEvents = EventStore(preview: true)
+    @StateObject var myEvents = EventStore(preview: false)
     
     // Tracks whether user has completed onboarding
     @AppStorage("didFinishOnboarding") var didFinishOnboarding = false
