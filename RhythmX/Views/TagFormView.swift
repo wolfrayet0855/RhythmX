@@ -1,5 +1,4 @@
 //
-//
 //  TagFormView.swift
 //  Rhythm
 //
@@ -17,7 +16,7 @@ enum TagCategory: String, CaseIterable {
     case other = "Other"
 }
 
-// MARK: - Archived Data Model (we reuse the same structs)
+// MARK: - Archived Data Model
 private struct TempArchivedDataBlock: Codable {
     let id: UUID
     let date: Date
@@ -37,13 +36,9 @@ struct TagFormView: View {
     @State private var customType: String = ""
     @State private var tagDate = Date()
 
-    // NEW: For retrieving archived data (to get “smart tags”).
     @State private var archivedDataBlocks: [TempArchivedDataBlock] = []
-    // We'll store the top tags from archive here:
     @State private var smartTags: [String] = []
     
-    // We'll define symptom suggestions for each phase:
-    // You can expand/edit these as you like.
     private let phaseSymptomSuggestions: [Event.EventType: [String]] = [
         .menstrual:  ["Cramps", "Bloating", "Fatigue", "Headache", "Irritability"],
         .follicular: ["Increased Energy", "Clearer Thinking", "Higher Libido"],
@@ -51,36 +46,29 @@ struct TagFormView: View {
         .luteal:     ["Mood Swings", "Breast Tenderness", "Food Cravings", "PMS"]
     ]
 
-    /// We no longer show an "All Day" toggle; always all day.
-    private let isAllDay = true
-
     var body: some View {
         NavigationStack {
             Form {
-                // Choose a broad category
                 Picker("Category", selection: $category) {
                     ForEach(TagCategory.allCases, id: \.self) { cat in
                         Text(cat.rawValue).tag(cat)
                     }
                 }
                 
-                // A free-form text for custom detail
                 TextField("Specific Type (e.g. 🍫)", text: $customType)
                     .textInputAutocapitalization(.words)
                     .autocorrectionDisabled(false)
                     .keyboardType(.default)
                 
-                // Pick a date
                 DatePicker("Date", selection: $tagDate, displayedComponents: .date)
                 
-                // NEW: Show suggested tags for whichever phase is on the chosen date
-                if let currentPhaseType = currentPhaseType {
-                    Section(header: Text("Suggested Symptoms for \(currentPhaseType.rawValue.capitalized) Phase")) {
-                        // Look up possible suggestions
-                        if let suggestions = phaseSymptomSuggestions[currentPhaseType], !suggestions.isEmpty {
+                if let phaseType = currentPhaseType {
+                    Section(header: Text("Suggested Symptoms for \(phaseType.rawValue.capitalized) Phase")) {
+                        if let suggestions = phaseSymptomSuggestions[phaseType], !suggestions.isEmpty {
                             ForEach(suggestions, id: \.self) { suggestion in
                                 Button {
-                                    addSuggestionToCustomType(suggestion)
+                                    category = .symptom
+                                    customType = suggestion
                                 } label: {
                                     Text(suggestion)
                                 }
@@ -92,14 +80,13 @@ struct TagFormView: View {
                     }
                 }
 
-                // NEW: Show “Smart Tags” from archived data
                 if !smartTags.isEmpty {
                     Section(header: Text("Smart Tags (from Archive)")) {
-                        ForEach(smartTags, id: \.self) { tag in
+                        ForEach(smartTags, id: \.self) { tagString in
                             Button {
-                                addSuggestionToCustomType(tag)
+                                applySmartTag(tagString)
                             } label: {
-                                Text(tag)
+                                Text(tagString)
                             }
                         }
                     }
@@ -119,48 +106,54 @@ struct TagFormView: View {
                     }
                 }
             }
-            // NEW: Load archived data and build smart tags once this view appears
             .onAppear {
                 loadArchivedDataBlocks()
                 buildSmartTags()
             }
+            // Use the iOS 17 style: zero- or two-parameter closure
+            .onChange(of: tagDate) { oldValue, newValue in
+                // Only rebuild if newValue is significantly different, etc.
+                buildSmartTags()
+            
+            }
         }
     }
 
-    /// Attempts to find an event for the chosen date, returning that event's phase type.
     private var currentPhaseType: Event.EventType? {
-        let matchedEvent = myEvents.events.first {
+        myEvents.events.first {
             $0.date.startOfDay == tagDate.startOfDay
-        }
-        return matchedEvent?.eventType
+        }?.eventType
     }
     
-    /// Append a selected suggestion (either from suggested symptoms or from smart tags)
-    /// into the `customType` field.
-    private func addSuggestionToCustomType(_ suggestion: String) {
-        if customType.isEmpty {
-            customType = suggestion
+    private func applySmartTag(_ tagString: String) {
+        let parts = tagString.split(separator: ":", maxSplits: 1)
+        if parts.count == 2 {
+            let prefix = String(parts[0]).trimmingCharacters(in: .whitespacesAndNewlines)
+            let suffix = String(parts[1]).trimmingCharacters(in: .whitespacesAndNewlines)
+            
+            if let matchedCategory = TagCategory.allCases.first(where: { $0.rawValue.lowercased() == prefix.lowercased() }) {
+                category = matchedCategory
+            } else {
+                category = .other
+            }
+            customType = suffix
         } else {
-            customType += ", \(suggestion)"
+            category = .other
+            customType = tagString
         }
     }
 
-    /// Saves the new tag to any Event that matches `tagDate`.
     private func saveTag() {
-        // e.g. if category = "Dietary" and customType = "🍫",
-        // then final "tag" is "Dietary:🍫"
-        let newTag = "\(category.rawValue):\(customType.isEmpty ? "unspecified" : customType)"
-
+        let finalTag = "\(category.rawValue):\(customType.isEmpty ? "unspecified" : customType)"
         let targetStartOfDay = tagDate.startOfDay
 
         for event in myEvents.events {
-            let eventStartOfDay = event.date.startOfDay
-            if eventStartOfDay == targetStartOfDay {
+            if event.date.startOfDay == targetStartOfDay {
                 var updated = event
                 if updated.tags.isEmpty {
-                    updated.tags = newTag
+                    updated.tags = finalTag
                 } else {
-                    updated.tags += ", \(newTag)"
+                    updated.tags += ", \(finalTag)"
                 }
                 myEvents.update(updated)
             }
@@ -168,9 +161,8 @@ struct TagFormView: View {
     }
 }
 
-// MARK: - ARCHIVED DATA LOADING + SMART TAGS
+// MARK: - ARCHIVED DATA + SMART TAGS
 extension TagFormView {
-    /// Loads archived data from UserDefaults (same key as in `SettingsCycleInfoView`).
     private func loadArchivedDataBlocks() {
         let archivedDataKey = "com.example.rhythm(x).archivedData"
         guard let data = UserDefaults.standard.data(forKey: archivedDataKey) else { return }
@@ -184,15 +176,19 @@ extension TagFormView {
         }
     }
     
-    /// Gather all tags from archived events, count frequency, and store top items in `smartTags`.
     private func buildSmartTags() {
+        guard let phaseType = currentPhaseType else {
+            smartTags = []
+            return
+        }
+        
         var frequency: [String: Int] = [:]
         
-        // Loop all archived blocks -> phases -> events
         for block in archivedDataBlocks {
-            for phase in block.groupedEvents {
-                for archivedEvent in phase.events {
-                    // Each event may have multiple tags, separated by commas
+            for archivedPhase in block.groupedEvents {
+                guard archivedPhase.eventType == phaseType else { continue }
+                
+                for archivedEvent in archivedPhase.events {
                     let rawTags = archivedEvent.tags
                         .split(separator: ",")
                         .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
@@ -202,10 +198,10 @@ extension TagFormView {
                 }
             }
         }
-        // Sort by usage (descending). Keep top ~6
-        let sorted = frequency.sorted { $0.value > $1.value }
-        let top = sorted.prefix(6).map { $0.key }
         
-        self.smartTags = top
+        let sorted = frequency.sorted { $0.value > $1.value }
+        let topTags = sorted.prefix(6).map { $0.key }
+        
+        self.smartTags = topTags
     }
 }
