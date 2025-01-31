@@ -36,15 +36,20 @@ struct TagFormView: View {
     @State private var customType: String = ""
     @State private var tagDate = Date()
 
+    // Keep track of archived data for building "Smart Tags"
     @State private var archivedDataBlocks: [TempArchivedDataBlock] = []
     @State private var smartTags: [String] = []
     
+    // Suggestion dictionary for quick symptom selection
     private let phaseSymptomSuggestions: [Event.EventType: [String]] = [
         .menstrual:  ["Cramps", "Bloating", "Fatigue", "Headache", "Irritability"],
         .follicular: ["Increased Energy", "Clearer Thinking", "Higher Libido"],
         .ovulation:  ["Mittelschmerz", "Egg-White Mucus", "Bloating"],
         .luteal:     ["Mood Swings", "Breast Tenderness", "Food Cravings", "PMS"]
     ]
+
+    // === NEW: Alert to stop duplicate tags on the same day ===
+    @State private var showDuplicateTagAlert = false
 
     var body: some View {
         NavigationStack {
@@ -63,7 +68,7 @@ struct TagFormView: View {
                 DatePicker("Date", selection: $tagDate, displayedComponents: .date)
                 
                 if let phaseType = currentPhaseType {
-                    Section(header: Text("Suggested Symptoms for \(phaseType.rawValue.capitalized) Phase")) {
+                    Section(header: Text("Suggested Tags for \(phaseType.rawValue.capitalized) Phase")) {
                         if let suggestions = phaseSymptomSuggestions[phaseType], !suggestions.isEmpty {
                             ForEach(suggestions, id: \.self) { suggestion in
                                 Button {
@@ -95,9 +100,14 @@ struct TagFormView: View {
             .navigationTitle("Add a New Tag")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
+                    // === Check for duplicates first ===
                     Button("Save") {
-                        saveTag()
-                        dismiss()
+                        if isDuplicateTag() {
+                            showDuplicateTagAlert = true
+                        } else {
+                            saveTag()
+                            dismiss()
+                        }
                     }
                 }
                 ToolbarItem(placement: .cancellationAction) {
@@ -106,15 +116,19 @@ struct TagFormView: View {
                     }
                 }
             }
+            // Show an alert if the user attempts a duplicate
+            .alert("Duplicate Tag", isPresented: $showDuplicateTagAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("This tag already exists for the selected day.")
+            }
             .onAppear {
                 loadArchivedDataBlocks()
                 buildSmartTags()
             }
-            // Use the iOS 17 style: zero- or two-parameter closure
+            // If iOS 17 or later:
             .onChange(of: tagDate) { oldValue, newValue in
-                // Only rebuild if newValue is significantly different, etc.
                 buildSmartTags()
-            
             }
         }
     }
@@ -125,6 +139,47 @@ struct TagFormView: View {
         }?.eventType
     }
     
+    // === NEW: Check if the tag already exists on this day across all events ===
+    private func isDuplicateTag() -> Bool {
+        let finalTag = buildTagString()
+        let targetStartOfDay = tagDate.startOfDay
+
+        // Gather all tags on this day from *all* events
+        var dayWideTagSet = Set<String>()
+        for event in myEvents.events where event.date.startOfDay == targetStartOfDay {
+            let tagsArray = event.tags
+                .split(separator: ",")
+                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+            for t in tagsArray {
+                dayWideTagSet.insert(t)
+            }
+        }
+        // Return true if we already have this exact tag
+        return dayWideTagSet.contains(finalTag)
+    }
+
+    private func buildTagString() -> String {
+        let sanitized = customType.isEmpty ? "unspecified" : customType
+        return "\(category.rawValue):\(sanitized)"
+    }
+
+    private func saveTag() {
+        let finalTag = buildTagString()
+        let targetStartOfDay = tagDate.startOfDay
+
+        // Append this new tag to *every* event on the chosen day
+        for event in myEvents.events where event.date.startOfDay == targetStartOfDay {
+            var updated = event
+            if updated.tags.isEmpty {
+                updated.tags = finalTag
+            } else {
+                updated.tags += ", \(finalTag)"
+            }
+            myEvents.update(updated)
+        }
+    }
+
+    // === Called when user taps a "smart tag" button ===
     private func applySmartTag(_ tagString: String) {
         let parts = tagString.split(separator: ":", maxSplits: 1)
         if parts.count == 2 {
@@ -140,23 +195,6 @@ struct TagFormView: View {
         } else {
             category = .other
             customType = tagString
-        }
-    }
-
-    private func saveTag() {
-        let finalTag = "\(category.rawValue):\(customType.isEmpty ? "unspecified" : customType)"
-        let targetStartOfDay = tagDate.startOfDay
-
-        for event in myEvents.events {
-            if event.date.startOfDay == targetStartOfDay {
-                var updated = event
-                if updated.tags.isEmpty {
-                    updated.tags = finalTag
-                } else {
-                    updated.tags += ", \(finalTag)"
-                }
-                myEvents.update(updated)
-            }
         }
     }
 }
@@ -205,3 +243,4 @@ extension TagFormView {
         self.smartTags = topTags
     }
 }
+
