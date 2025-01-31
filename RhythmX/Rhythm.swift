@@ -8,25 +8,23 @@ import SwiftUI
 struct AppEntry: App {
     @StateObject var myEvents = EventStore(preview: false)
     
-    // Tracks whether user has completed onboarding
-    @AppStorage("didFinishOnboarding") var didFinishOnboarding = false
+    // ADD: One instance of ArchivedDataStore for the entire app
+    @StateObject var archivedDataStore = ArchivedDataStore()
 
-    // Tracks which tab to show in StartTabView (0 = first tab, 1 = second, 2 = Settings, etc.)
+    @AppStorage("didFinishOnboarding") var didFinishOnboarding = false
     @AppStorage("selectedTab") var selectedTab = 0
 
     var body: some Scene {
         WindowGroup {
             if didFinishOnboarding {
-                // The user is done with onboarding; show main app
                 StartTabView()
                     .environmentObject(myEvents)
+                    .environmentObject(archivedDataStore)  // Provide to child views
             } else {
-                // Show Onboarding
                 OnboardingView()
                     .environmentObject(myEvents)
+                    .environmentObject(archivedDataStore)
             }
         }
     }
 }
-
-
