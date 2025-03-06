@@ -1,7 +1,6 @@
 //
 //  SettingsCycleInfoView.swift
 //
-
 import SwiftUI
 
 struct SettingsCycleInfoView: View {
@@ -77,6 +76,10 @@ struct SettingsCycleInfoView: View {
                     NavigationLink("View Archived Data") {
                         ArchivedDataView()
                     }
+                    
+                    NavigationLink("Visualization") {
+                        ArchivedDataSymptomVisualizationView()
+                    }
                 }
             }
             .navigationTitle("Settings")
@@ -123,4 +126,3 @@ struct SettingsCycleInfoView: View {
         showArchivedAlert = true
     }
 }
-
