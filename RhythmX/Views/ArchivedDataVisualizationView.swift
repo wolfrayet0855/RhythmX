@@ -9,10 +9,10 @@ struct ArchivedDataSymptomVisualizationView: View {
     // Map each phase to a display name.
     func displayName(for phase: Event.EventType) -> String {
         switch phase {
-        case .menstrual: return "Menstruation"
+        case .menstrual:  return "Menstruation"
         case .follicular: return "Follicular"
-        case .ovulation: return "Ovulatory"
-        case .luteal: return "Luteal"
+        case .ovulation:  return "Ovulatory"
+        case .luteal:     return "Luteal"
         }
     }
     
@@ -22,7 +22,8 @@ struct ArchivedDataSymptomVisualizationView: View {
         for block in archivedDataStore.archivedBlocks {
             for phase in block.groupedEvents {
                 for event in phase.events {
-                    let eventTags = event.tags.split(separator: ",")
+                    let eventTags = event.tags
+                        .split(separator: ",")
                         .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
                     for tag in eventTags where !tag.isEmpty {
                         frequency[tag, default: 0] += 1
@@ -45,7 +46,8 @@ struct ArchivedDataSymptomVisualizationView: View {
         for block in archivedDataStore.archivedBlocks {
             if let phaseEvents = block.groupedEvents.first(where: { $0.eventType == phase }) {
                 for event in phaseEvents.events {
-                    let eventTags = event.tags.split(separator: ",")
+                    let eventTags = event.tags
+                        .split(separator: ",")
                         .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
                     for tag in eventTags {
                         if counts.keys.contains(tag) {
@@ -80,6 +82,15 @@ struct ArchivedDataSymptomVisualizationView: View {
                         .padding()
                 } else {
                     VStack(alignment: .leading, spacing: 24) {
+                        // Summary at the top
+                        Text("Summary")
+                            .font(.headline)
+                        Text("This chart shows the frequency of recorded symptoms across each phase. The bars represent how often a symptom was logged. The percentage indicates that symptom's share of all symptoms in the phase.")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .padding(.bottom, 8)
+                        
+                        // Render each phase
                         ForEach(phases, id: \.self) { phase in
                             let phaseCounts = aggregatedCounts(for: phase)
                             VStack(alignment: .leading, spacing: 8) {
@@ -90,14 +101,25 @@ struct ArchivedDataSymptomVisualizationView: View {
                                 // For each dynamic symptom with nonzero count, render a row.
                                 ForEach(symptoms.filter { (phaseCounts[$0] ?? 0) > 0 }, id: \.self) { symptom in
                                     let count = phaseCounts[symptom] ?? 0
+                                    let totalForPhase = phaseCounts.values.reduce(0, +)
+                                    let percentage = totalForPhase > 0
+                                        ? (Double(count) / Double(totalForPhase)) * 100
+                                        : 0
+                                    
                                     HStack {
-                                        // Display the symptom text in a fixed-width column.
+                                        // Symptom label with truncation + .help(...) for hover tooltips
                                         Text(symptom)
                                             .font(.subheadline)
                                             .foregroundColor(.primary)
+                                            .lineLimit(1)
+                                            .truncationMode(.tail)
+                                            .help(symptom)  // iPad pointer / Mac Catalyst tooltip
+                                            .contextMenu {
+                                                Text(symptom) // Iphone popover 
+                                            }
                                             .frame(minWidth: 80, alignment: .leading)
                                         
-                                        // The bar uses a GeometryReader to scale width proportionally.
+                                        // Bar chart
                                         GeometryReader { geo in
                                             let barWidth = (CGFloat(count) / CGFloat(maxCount)) * geo.size.width
                                             ZStack(alignment: .leading) {
@@ -109,10 +131,13 @@ struct ArchivedDataSymptomVisualizationView: View {
                                             }
                                         }
                                         .frame(height: 20)
+                                        
+                                        // Percentage text
+                                        Text(String(format: "%.0f%%", percentage))
+                                            .frame(width: 50, alignment: .trailing)
                                     }
                                     .frame(height: 20)
                                 }
-                                
                                 Divider()
                             }
                         }
@@ -120,7 +145,8 @@ struct ArchivedDataSymptomVisualizationView: View {
                     .padding()
                 }
             }
-            .navigationTitle("Symptom Visualization")
+            // Updated navigation title
+            .navigationTitle("Symptom Analysis")
         }
     }
 }
@@ -134,43 +160,9 @@ struct ArchivedDataSymptomVisualizationView_Previews: PreviewProvider {
                 ArchivedDataBlock.PhaseEvents(
                     eventType: .menstrual,
                     events: [
-                        Event(eventType: .menstrual, date: Date(), note: "", tags: "Cramps, Fatigue"),
-                        Event(eventType: .menstrual, date: Date(), note: "", tags: "Cramps"),
+                        Event(eventType: .menstrual, date: Date(), note: "", tags: "Bloating, Fatigue"),
                         Event(eventType: .menstrual, date: Date(), note: "", tags: "Fatigue"),
-                        Event(eventType: .menstrual, date: Date(), note: "", tags: "Bloating"),
-                        Event(eventType: .menstrual, date: Date(), note: "", tags: "Mood Swings"),
                         Event(eventType: .menstrual, date: Date(), note: "", tags: "Cramps")
-                    ]
-                )
-            ]
-        )
-        
-        let sampleBlockFollicular = ArchivedDataBlock(
-            date: Date().addingTimeInterval(-86400),
-            groupedEvents: [
-                ArchivedDataBlock.PhaseEvents(
-                    eventType: .follicular,
-                    events: [
-                        Event(eventType: .follicular, date: Date(), note: "", tags: "Cramps"),
-                        Event(eventType: .follicular, date: Date(), note: "", tags: "Fatigue"),
-                        Event(eventType: .follicular, date: Date(), note: "", tags: "Bloating"),
-                        Event(eventType: .follicular, date: Date(), note: "", tags: "Mood Swings"),
-                        Event(eventType: .follicular, date: Date(), note: "", tags: "Cramps")
-                    ]
-                )
-            ]
-        )
-        
-        let sampleBlockOvulatory = ArchivedDataBlock(
-            date: Date().addingTimeInterval(-2 * 86400),
-            groupedEvents: [
-                ArchivedDataBlock.PhaseEvents(
-                    eventType: .ovulation,
-                    events: [
-                        Event(eventType: .ovulation, date: Date(), note: "", tags: "Cramps"),
-                        Event(eventType: .ovulation, date: Date(), note: "", tags: "Fatigue"),
-                        Event(eventType: .ovulation, date: Date(), note: "", tags: "Bloating"),
-                        Event(eventType: .ovulation, date: Date(), note: "", tags: "Mood Swings")
                     ]
                 )
             ]
@@ -182,24 +174,18 @@ struct ArchivedDataSymptomVisualizationView_Previews: PreviewProvider {
                 ArchivedDataBlock.PhaseEvents(
                     eventType: .luteal,
                     events: [
-                        Event(eventType: .luteal, date: Date(), note: "", tags: "Cramps"),
-                        Event(eventType: .luteal, date: Date(), note: "", tags: "Cramps"),
-                        Event(eventType: .luteal, date: Date(), note: "", tags: "Fatigue"),
-                        Event(eventType: .luteal, date: Date(), note: "", tags: "Fatigue"),
-                        Event(eventType: .luteal, date: Date(), note: "", tags: "Bloating"),
-                        Event(eventType: .luteal, date: Date(), note: "", tags: "Mood Swings"),
-                        Event(eventType: .luteal, date: Date(), note: "", tags: "Mood Swings")
+                        Event(eventType: .luteal, date: Date(), note: "", tags: "Food Cravings"),
+                        Event(eventType: .luteal, date: Date(), note: "", tags: "Bloating, Food Cravings")
                     ]
                 )
             ]
         )
         
         let store = ArchivedDataStore()
-        store.archivedBlocks = [sampleBlockMenstrual, sampleBlockFollicular, sampleBlockOvulatory, sampleBlockLuteal]
+        store.archivedBlocks = [sampleBlockMenstrual, sampleBlockLuteal]
         
         return ArchivedDataSymptomVisualizationView()
             .environmentObject(store)
             .previewLayout(.sizeThatFits)
     }
 }
-
