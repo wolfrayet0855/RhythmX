@@ -13,6 +13,10 @@ struct ArchivedDataView: View {
 
     // For searching tags
     @State private var searchText = ""
+    
+    // NEW: State for editing tags in archived events
+    @State private var editingEvent: Event? = nil
+    @State private var editedTags: String = ""
 
     var body: some View {
         NavigationStack {
@@ -42,12 +46,20 @@ struct ArchivedDataView: View {
                                     .font(.subheadline)
                                     .foregroundColor(.secondary)
 
-                                    // Show each event's tags that match the search
+                                    // Updated: Show each event's tags with an edit option
                                     ForEach(phase.events, id: \.id) { archivedEvent in
                                         if !archivedEvent.tags.isEmpty {
-                                            Text("• \(archivedEvent.tags)")
+                                            HStack {
+                                                Text("• \(archivedEvent.tags)")
+                                                    .font(.footnote)
+                                                    .foregroundColor(.blue)
+                                                Spacer()
+                                                Button("Edit") {
+                                                    editingEvent = archivedEvent
+                                                    editedTags = archivedEvent.tags
+                                                }
                                                 .font(.footnote)
-                                                .foregroundColor(.blue)
+                                            }
                                         }
                                     }
                                 }
@@ -75,6 +87,30 @@ struct ArchivedDataView: View {
                 Button("Cancel", role: .cancel) {}
             } message: {
                 Text("This action will permanently remove all archived data.")
+            }
+        }
+        // NEW: Sheet for editing an archived event's tags
+        .sheet(item: $editingEvent) { event in
+            NavigationStack {
+                Form {
+                    Section(header: Text("Edit Tags")) {
+                        TextField("Tags", text: $editedTags)
+                    }
+                }
+                .navigationTitle("Edit Tag")
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Save") {
+                            archivedDataStore.updateArchivedEventTag(eventId: event.id, newTags: editedTags)
+                            editingEvent = nil
+                        }
+                    }
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Cancel") {
+                            editingEvent = nil
+                        }
+                    }
+                }
             }
         }
     }
@@ -110,3 +146,4 @@ struct ArchivedDataView: View {
         }
     }
 }
+

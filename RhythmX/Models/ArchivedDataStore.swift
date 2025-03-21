@@ -49,4 +49,29 @@ class ArchivedDataStore: ObservableObject {
         archivedBlocks.removeAll()
         saveArchivedData()
     }
+
+    /// Update the tags of a specific archived event given its ID and new tag string.
+    func updateArchivedEventTag(eventId: String, newTags: String) {
+        for (blockIndex, block) in archivedBlocks.enumerated() {
+            var didUpdate = false
+            let updatedPhases = block.groupedEvents.map { phase -> ArchivedDataBlock.PhaseEvents in
+                let updatedEvents = phase.events.map { event -> Event in
+                    if event.id == eventId {
+                        didUpdate = true
+                        var newEvent = event
+                        newEvent.tags = newTags
+                        return newEvent
+                    }
+                    return event
+                }
+                return ArchivedDataBlock.PhaseEvents(eventType: phase.eventType, events: updatedEvents)
+            }
+            if didUpdate {
+                let updatedBlock = ArchivedDataBlock(id: block.id, date: block.date, groupedEvents: updatedPhases)
+                archivedBlocks[blockIndex] = updatedBlock
+                saveArchivedData()
+                break
+            }
+        }
+    }
 }
