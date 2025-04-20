@@ -44,6 +44,7 @@ struct CalendarView: UIViewRepresentable {
     }
 
     class Coordinator: NSObject, UICalendarViewDelegate, UICalendarSelectionSingleDateDelegate  {
+    class Coordinator: NSObject, UICalendarViewDelegate, UICalendarSelectionSingleDateDelegate {
         let parent: CalendarView
 
         init(parent: CalendarView) {
