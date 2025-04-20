@@ -43,7 +43,7 @@ struct CalendarView: UIViewRepresentable {
         Coordinator(parent: self)
     }
 
-    class Coordinator: NSObject, @preconcurrency UICalendarViewDelegate, UICalendarSelectionSingleDateDelegate {
+    class Coordinator: NSObject, UICalendarViewDelegate, UICalendarSelectionSingleDateDelegate {
         let parent: CalendarView
 
         init(parent: CalendarView) {
