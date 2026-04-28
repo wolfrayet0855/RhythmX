@@ -5,13 +5,15 @@
 //  Created by user on 1/31/25.
 //
 import Foundation
+import UserNotifications
 
 @MainActor
 class ArchivedDataStore: ObservableObject {
     @Published var archivedBlocks: [ArchivedDataBlock] = []
+    @Published var persistenceError: String? = nil
 
     // Adjust your UserDefaults key, if needed
-    private let archivedDataKey = "com.example.rhythm(x).archivedData"
+    private let archivedDataKey = PersistenceKeys.archivedData
 
     init() {
         loadArchivedData()
@@ -23,7 +25,7 @@ class ArchivedDataStore: ObservableObject {
             let decoded = try JSONDecoder().decode([ArchivedDataBlock].self, from: data)
             self.archivedBlocks = decoded
         } catch {
-            print("Error decoding archived data: \(error)")
+            persistenceError = "Could not load your archived cycles. Your data may be corrupted."
         }
     }
 
@@ -36,12 +38,25 @@ class ArchivedDataStore: ObservableObject {
         }
     }
 
-    /// Append a new Archive block, then save.
     func appendArchivedBlock(_ newBlock: ArchivedDataBlock) {
         archivedBlocks.append(newBlock)
-        // Sort newest first if you like:
         archivedBlocks.sort { $0.date > $1.date }
         saveArchivedData()
+
+        // Trigger first-time notification prompt
+        let hasPrompted = UserDefaults.standard.bool(forKey: "hasPromptedNotifications")
+        if !hasPrompted {
+            UserDefaults.standard.set(true, forKey: "hasPromptedNotifications")
+            NotificationCenter.default.post(name: .rhythmxPromptNotifications, object: nil)
+        }
+
+        // Reschedule reminders if notifications are enabled
+        let enabled = UserDefaults.standard.bool(forKey: "notificationsEnabled")
+        let dayBefore = UserDefaults.standard.bool(forKey: "notifyDayBefore")
+        let dayOf = UserDefaults.standard.bool(forKey: "notifyDayOf")
+        if enabled, let predicted = CyclePredictionService.predictedStartDate(from: archivedBlocks) {
+            NotificationScheduler.scheduleCycleReminders(for: predicted, dayBefore: dayBefore, dayOf: dayOf)
+        }
     }
 
     /// Clear all archived data, then save.
@@ -50,7 +65,6 @@ class ArchivedDataStore: ObservableObject {
         saveArchivedData()
     }
 
-    /// Update the tags of a specific archived event given its ID and new tag string.
     func updateArchivedEventTag(eventId: String, newTags: String) {
         for (blockIndex, block) in archivedBlocks.enumerated() {
             var didUpdate = false
@@ -74,4 +88,8 @@ class ArchivedDataStore: ObservableObject {
             }
         }
     }
+}
+
+extension Notification.Name {
+    static let rhythmxPromptNotifications = Notification.Name("rhythmxPromptNotifications")
 }

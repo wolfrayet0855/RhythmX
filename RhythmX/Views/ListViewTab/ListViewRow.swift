@@ -1,10 +1,4 @@
-
-//
 //  ListViewRow.swift
-//  Rhythm
-//
-//  Created by user on 9/27/24.
-//
 
 import SwiftUI
 
@@ -13,40 +7,33 @@ struct ListViewRow: View {
     @Binding var formType: EventFormType?
 
     var body: some View {
-        HStack {
-            VStack(alignment: .leading) {
-                HStack {
-                    Text(event.eventType.icon)
-                        .font(.system(size: 40))
-                    Text("\(event.eventType.rawValue.capitalized) Phase")
-                }
+        HStack(spacing: DS.Spacing.sm) {
+            PhaseNumberBadge(phase: event.eventType)
+
+            VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                Text(event.eventType.displayName)
+                    .font(DS.Font.label.weight(.semibold))
+                    .foregroundColor(DS.Color.primaryText)
+
                 Text(event.date.formatted(date: .abbreviated, time: .shortened))
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .font(DS.Font.caption)
+                    .foregroundColor(DS.Color.secondaryText)
 
                 if !event.tags.isEmpty {
                     Text("Tags: \(event.tags)")
-                        .font(.footnote)
-                        .foregroundColor(.blue)
+                        .font(DS.Font.caption)
+                        .foregroundColor(.accentColor)
                 }
             }
+
             Spacer()
+
             Button("Edit") {
                 formType = .update(event)
             }
-            .buttonStyle(.bordered)
+            .font(DS.Font.caption.weight(.medium))
+            .foregroundColor(.accentColor)
         }
-    }
-}
-
-struct ListViewRow_Previews: PreviewProvider {
-    static let sampleEvent = Event(
-        eventType: .menstrual,
-        date: Date(),
-        note: "Example note",
-        tags: "cramping, chocolate"
-    )
-    static var previews: some View {
-        ListViewRow(event: sampleEvent, formType: .constant(.update(sampleEvent)))
+        .padding(.vertical, DS.Spacing.xs)
     }
 }

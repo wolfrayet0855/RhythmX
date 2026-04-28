@@ -8,36 +8,24 @@
 import SwiftUI
 
 enum TagCategory: String, CaseIterable {
-    case dietary = "Dietary"
-    case exercise = "Exercise"
-    case medication = "Medication"
-    case mood = "Mood"
-    case symptom = "Symptom"
-    case other = "Other"
-}
-
-// MARK: - Archived Data Model
-private struct TempArchivedDataBlock: Codable {
-    let id: UUID
-    let date: Date
-    let groupedEvents: [TempPhaseEvents]
-}
-
-private struct TempPhaseEvents: Codable {
-    let eventType: Event.EventType
-    let events: [Event]
+    case dietary        = "Dietary"
+    case exercise       = "Exercise"
+    case medication     = "Medication"
+    case mood           = "Mood"
+    case symptom        = "Symptom"
+    case cervicalMucus  = "Cervical Mucus"
+    case other          = "Other"
 }
 
 struct TagFormView: View {
     @EnvironmentObject var myEvents: EventStore
+    @EnvironmentObject var archivedDataStore: ArchivedDataStore
     @Environment(\.dismiss) var dismiss
 
     @State private var category: TagCategory = .dietary
     @State private var customType: String = ""
     @State private var tagDate = Date()
 
-    // Keep track of archived data for building "Smart Tags"
-    @State private var archivedDataBlocks: [TempArchivedDataBlock] = []
     @State private var smartTags: [String] = []
     
     // Suggestion dictionary for quick symptom selection
@@ -70,30 +58,64 @@ struct TagFormView: View {
                 if let phaseType = currentPhaseType {
                     Section(header: Text("Suggested Tags for \(phaseType.rawValue.capitalized) Phase")) {
                         if let suggestions = phaseSymptomSuggestions[phaseType], !suggestions.isEmpty {
-                            ForEach(suggestions, id: \.self) { suggestion in
-                                Button {
-                                    category = .symptom
-                                    customType = suggestion
-                                } label: {
-                                    Text(suggestion)
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: DS.Spacing.sm) {
+                                    ForEach(suggestions, id: \.self) { suggestion in
+                                        ChipButton(
+                                            title: suggestion,
+                                            isSelected: customType == suggestion && category == .symptom
+                                        ) {
+                                            category = .symptom
+                                            customType = suggestion
+                                        }
+                                    }
                                 }
+                                .padding(.vertical, DS.Spacing.xs)
                             }
+                            .listRowInsets(EdgeInsets(top: 0, leading: DS.Spacing.md, bottom: 0, trailing: DS.Spacing.md))
                         } else {
                             Text("No suggestions available for this phase.")
-                                .foregroundColor(.secondary)
+                                .font(DS.Font.caption)
+                                .foregroundColor(DS.Color.secondaryText)
                         }
+                    }
+                }
+
+                if let phaseType = currentPhaseType,
+                   (phaseType == .follicular || phaseType == .ovulation),
+                   category != .cervicalMucus {
+                    Section(header: Text("Track Cervical Mucus")) {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: DS.Spacing.sm) {
+                                ForEach(TagLibrary.tags[.cervicalMucus] ?? [], id: \.self) { tag in
+                                    ChipButton(
+                                        title: tag,
+                                        isSelected: customType == tag && category == .cervicalMucus
+                                    ) {
+                                        category = .cervicalMucus
+                                        customType = tag
+                                    }
+                                }
+                            }
+                            .padding(.vertical, DS.Spacing.xs)
+                        }
+                        .listRowInsets(EdgeInsets(top: 0, leading: DS.Spacing.md, bottom: 0, trailing: DS.Spacing.md))
                     }
                 }
 
                 if !smartTags.isEmpty {
                     Section(header: Text("Smart Tags (from Archive)")) {
-                        ForEach(smartTags, id: \.self) { tagString in
-                            Button {
-                                applySmartTag(tagString)
-                            } label: {
-                                Text(tagString)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: DS.Spacing.sm) {
+                                ForEach(smartTags, id: \.self) { tagString in
+                                    ChipButton(title: tagString) {
+                                        applySmartTag(tagString)
+                                    }
+                                }
                             }
+                            .padding(.vertical, DS.Spacing.xs)
                         }
+                        .listRowInsets(EdgeInsets(top: 0, leading: DS.Spacing.md, bottom: 0, trailing: DS.Spacing.md))
                     }
                 }
             }
@@ -123,8 +145,8 @@ struct TagFormView: View {
                 Text("This tag already exists for the selected day.")
             }
             .onAppear {
-                loadArchivedDataBlocks()
                 buildSmartTags()
+                smartPrePopulate()
             }
             // If iOS 17 or later:
             .onChange(of: tagDate) { oldValue, newValue in
@@ -159,8 +181,9 @@ struct TagFormView: View {
     }
 
     private func buildTagString() -> String {
-        let sanitized = customType.isEmpty ? "unspecified" : customType
-        return "\(category.rawValue):\(sanitized)"
+        let trimmed = customType.trimmingCharacters(in: .whitespacesAndNewlines)
+        let capitalized = trimmed.isEmpty ? "unspecified" : (trimmed.prefix(1).uppercased() + trimmed.dropFirst())
+        return "\(category.rawValue):\(capitalized)"
     }
 
     private func saveTag() {
@@ -199,33 +222,18 @@ struct TagFormView: View {
     }
 }
 
-// MARK: - ARCHIVED DATA + SMART TAGS
+// MARK: - SMART TAGS
 extension TagFormView {
-    private func loadArchivedDataBlocks() {
-        let archivedDataKey = "com.example.rhythm(x).archivedData"
-        guard let data = UserDefaults.standard.data(forKey: archivedDataKey) else { return }
-        do {
-            let decoder = JSONDecoder()
-            let decoded = try decoder.decode([TempArchivedDataBlock].self, from: data)
-            archivedDataBlocks = decoded
-        } catch {
-            print("Error decoding archived data for TagFormView: \(error)")
-            archivedDataBlocks = []
-        }
-    }
-    
     private func buildSmartTags() {
         guard let phaseType = currentPhaseType else {
             smartTags = []
             return
         }
-        
+
         var frequency: [String: Int] = [:]
-        
-        for block in archivedDataBlocks {
-            for archivedPhase in block.groupedEvents {
-                guard archivedPhase.eventType == phaseType else { continue }
-                
+
+        for block in archivedDataStore.archivedBlocks {
+            for archivedPhase in block.groupedEvents where archivedPhase.eventType == phaseType {
                 for archivedEvent in archivedPhase.events {
                     let rawTags = archivedEvent.tags
                         .split(separator: ",")
@@ -236,11 +244,45 @@ extension TagFormView {
                 }
             }
         }
-        
-        let sorted = frequency.sorted { $0.value > $1.value }
-        let topTags = sorted.prefix(6).map { $0.key }
-        
-        self.smartTags = topTags
+
+        var ranked = frequency.sorted { $0.value > $1.value }.map { $0.key }
+
+        // Append library tags for current category not already in smart list
+        let libTags = TagLibrary.tags[category] ?? []
+        let existing = Set(ranked)
+        let additional = libTags
+            .filter { !existing.contains("\(category.rawValue):\($0)") && !existing.contains($0) }
+            .map { $0 }
+        ranked = Array((ranked + additional).prefix(8))
+
+        smartTags = ranked
+    }
+
+    private func smartPrePopulate() {
+        guard let phaseType = currentPhaseType else { return }
+        var categoryFreq: [TagCategory: Int] = [:]
+        for block in archivedDataStore.archivedBlocks {
+            for archivedPhase in block.groupedEvents where archivedPhase.eventType == phaseType {
+                for archivedEvent in archivedPhase.events {
+                    let rawTags = archivedEvent.tags
+                        .split(separator: ",")
+                        .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                    for tag in rawTags where !tag.isEmpty {
+                        let parts = tag.split(separator: ":", maxSplits: 1)
+                        guard parts.count == 2 else { continue }
+                        let prefix = String(parts[0]).trimmingCharacters(in: .whitespacesAndNewlines)
+                        if let cat = TagCategory.allCases.first(where: {
+                            $0.rawValue.lowercased() == prefix.lowercased()
+                        }) {
+                            categoryFreq[cat, default: 0] += 1
+                        }
+                    }
+                }
+            }
+        }
+        if let topCategory = categoryFreq.max(by: { $0.value < $1.value })?.key {
+            category = topCategory
+        }
     }
 }
 

@@ -1,24 +1,31 @@
-//
 //  EventsCalendarView.swift
-//
 
 import SwiftUI
 
 struct EventsCalendarView: View {
     @EnvironmentObject var eventStore: EventStore
+    @EnvironmentObject var archivedDataStore: ArchivedDataStore
     @State private var dateSelected: DateComponents?
     @State private var displayEvents = false
+    @State private var showNotificationPrompt = false
+
+    private var daysUntilPrediction: Int? {
+        CyclePredictionService.daysUntilPrediction(from: archivedDataStore.archivedBlocks)
+    }
 
     var body: some View {
         NavigationStack {
             ScrollView {
+                if let days = daysUntilPrediction, days >= 0, days <= 3 {
+                    PredictionBannerView(daysUntil: days)
+                }
+
                 CalendarView(
                     interval: DateInterval(start: .distantPast, end: .distantFuture),
                     eventStore: eventStore,
                     dateSelected: $dateSelected,
                     displayEvents: $displayEvents
                 )
-                // KEY CHANGE: Force a full reload each time `eventStore.shouldReloadAll` toggles
                 .id(eventStore.shouldReloadAll)
 
                 Image("launchScreen")
@@ -30,14 +37,33 @@ struct EventsCalendarView: View {
                 DaysEventsListView(dateSelected: $dateSelected)
                     .presentationDetents([.medium, .large])
             }
-            .navigationTitle("Calendar View")
+            .navigationTitle("Calendar")
+            .alert("Cycle Reminders", isPresented: $showNotificationPrompt) {
+                Button("Enable") {
+                    NotificationScheduler.requestPermissionIfNeeded { granted in
+                        if granted {
+                            UserDefaults.standard.set(true, forKey: "notificationsEnabled")
+                            if let predicted = CyclePredictionService.predictedStartDate(from: archivedDataStore.archivedBlocks) {
+                                NotificationScheduler.scheduleCycleReminders(
+                                    for: predicted, dayBefore: true, dayOf: true
+                                )
+                            }
+                        }
+                    }
+                }
+                Button("Not Now", role: .cancel) {}
+            } message: {
+                Text("Want reminders when your next cycle is near?")
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .rhythmxPromptNotifications)) { _ in
+                showNotificationPrompt = true
+            }
         }
     }
 }
 
-struct EventsCalendarView_Previews: PreviewProvider {
-    static var previews: some View {
-        EventsCalendarView()
-            .environmentObject(EventStore(preview: true))
-    }
+#Preview {
+    EventsCalendarView()
+        .environmentObject(EventStore(preview: true))
+        .environmentObject(ArchivedDataStore())
 }

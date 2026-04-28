@@ -31,39 +31,41 @@ struct ArchivedDataView: View {
                         }
 
                         ForEach(sortedPhases, id: \.eventType.id) { phase in
-                            // If the phase has at least one event, show it
                             if let firstDate = phase.events.first?.date,
                                let lastDate = phase.events.last?.date {
-                                VStack(alignment: .leading, spacing: 6) {
-                                    // Title
-                                    Text("\(phase.eventType.rawValue.capitalized) Phase")
-                                        .font(.headline)
-                                    // Date range
-                                    Text(
-                                        firstDate.formatted(date: .abbreviated, time: .omitted)
-                                        + " – "
-                                        + lastDate.formatted(date: .abbreviated, time: .omitted)
-                                    )
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-
-                                    // Show bullet points of each event’s tags
-                                    ForEach(phase.events, id: \.id) { e in
-                                        if !e.tags.isEmpty {
-                                            Text("• \(e.tags)")
-                                                .font(.footnote)
-                                                .foregroundColor(.blue)
+                                VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                                    HStack(spacing: DS.Spacing.sm) {
+                                        PhaseNumberBadge(phase: phase.eventType)
+                                        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                                            Text(phase.eventType.displayName)
+                                                .font(DS.Font.sectionHeader)
+                                                .foregroundColor(DS.Color.primaryText)
+                                            Text(
+                                                firstDate.formatted(date: .abbreviated, time: .omitted)
+                                                + " – "
+                                                + lastDate.formatted(date: .abbreviated, time: .omitted)
+                                            )
+                                            .font(DS.Font.caption)
+                                            .foregroundColor(DS.Color.secondaryText)
                                         }
                                     }
 
-                                    // NavigationLink to push a new view for editing
+                                    ForEach(phase.events, id: \.id) { e in
+                                        if !e.tags.isEmpty {
+                                            Text("• \(e.tags)")
+                                                .font(DS.Font.caption)
+                                                .foregroundColor(.accentColor)
+                                        }
+                                    }
+
                                     NavigationLink("Edit All Tags") {
                                         PhaseTagsEditorView(phase: phase)
                                     }
-                                    .font(.footnote)
-                                    .padding(.top, 4)
+                                    .font(DS.Font.caption.weight(.medium))
+                                    .foregroundColor(.accentColor)
+                                    .padding(.top, DS.Spacing.xs)
                                 }
-                                .padding(.vertical, 4)
+                                .padding(.vertical, DS.Spacing.xs)
                             }
                         }
                     }

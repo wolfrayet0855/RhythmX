@@ -110,10 +110,9 @@ Tracking symptoms can help identify patterns and better manage the physical and 
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    // For each block of text, we parse it by lines
+                VStack(alignment: .leading, spacing: DS.Spacing.md) {
                     ForEach(phases) { block in
-                        VStack(alignment: .leading, spacing: 6) {
+                        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
                             let lines = block.content.components(separatedBy: .newlines)
                             
                             ForEach(lines.indices, id: \.self) { i in
@@ -128,8 +127,8 @@ Tracking symptoms can help identify patterns and better manage the physical and 
                             }
                         }
                         .padding()
-                        .background(Color(uiColor: .secondarySystemBackground))
-                        .cornerRadius(8)
+                        .background(DS.Color.cardBackground)
+                        .cornerRadius(DS.Radius.card)
                     }
                     
                     // Fun, lighthearted disclaimer at the bottom
@@ -137,10 +136,10 @@ Tracking symptoms can help identify patterns and better manage the physical and 
                     Text("""
 Disclaimer: The information above is for your general knowledge and educational purposes – not a substitute for professional medical advice! Always consult a doctor if you have any health concerns. Keep grooving, stay informed, and remember: your body is unique, and we're just here to help you find your rhythm.
 """)
-                        .font(.footnote)
+                        .font(DS.Font.caption)
                         .multilineTextAlignment(.center)
-                        .foregroundColor(.secondary)
-                        .padding(.horizontal)
+                        .foregroundColor(DS.Color.secondaryText)
+                        .padding(.horizontal, DS.Spacing.md)
                 }
                 .padding()
             }
@@ -157,11 +156,11 @@ Disclaimer: The information above is for your general knowledge and educational 
             
             // Construct a single Text with the first portion in bold
             Text(.init("**\(keyPart):**\(valPart)"))
-                .font(.body)
+                .font(DS.Font.body)
         } else {
             // No colon => just show normally
             Text(line)
-                .font(.body)
+                .font(DS.Font.body)
         }
     }
 }

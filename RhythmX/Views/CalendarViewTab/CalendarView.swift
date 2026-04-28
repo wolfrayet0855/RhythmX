@@ -54,27 +54,25 @@ struct CalendarView: UIViewRepresentable {
             _ calendarView: UICalendarView,
             decorationFor dateComponents: DateComponents
         ) -> UICalendarView.Decoration? {
-            let foundEvents = parent.eventStore.events.filter {
+            guard let event = parent.eventStore.events.first(where: {
                 $0.date.startOfDay == dateComponents.date?.startOfDay
+            }) else { return nil }
+
+            return .customView {
+                let size: CGFloat = 20
+                let container = UIView(frame: CGRect(x: 0, y: 0, width: size, height: size))
+                container.backgroundColor = UIColor(event.eventType.phaseColor)
+                container.layer.cornerRadius = size / 2
+                container.clipsToBounds = true
+
+                let label = UILabel(frame: container.bounds)
+                label.text = "\(event.eventType.phaseNumber)"
+                label.textColor = .white
+                label.font = .boldSystemFont(ofSize: 11)
+                label.textAlignment = .center
+                container.addSubview(label)
+                return container
             }
-            if foundEvents.isEmpty {
-                return nil
-            }
-            if foundEvents.count > 1 {
-                return .image(
-                    UIImage(systemName: "doc.on.doc.fill"),
-                    color: .red,
-                    size: .large
-                )
-            }
-            if let singleEvent = foundEvents.first {
-                return .customView {
-                    let label = UILabel()
-                    label.text = singleEvent.eventType.icon
-                    return label
-                }
-            }
-            return nil
         }
 
         func dateSelection(

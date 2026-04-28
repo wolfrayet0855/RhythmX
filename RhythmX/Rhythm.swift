@@ -6,24 +6,24 @@ import SwiftUI
 
 @main
 struct AppEntry: App {
-    @StateObject var myEvents = EventStore(preview: false)
-    
-    // ADD: One instance of ArchivedDataStore for the entire app
+    @StateObject var myEvents          = EventStore(preview: false)
     @StateObject var archivedDataStore = ArchivedDataStore()
+    @StateObject var appSettings       = AppSettings()
 
     @AppStorage("didFinishOnboarding") var didFinishOnboarding = false
-    @AppStorage("selectedTab") var selectedTab = 0
 
     var body: some Scene {
         WindowGroup {
             if didFinishOnboarding {
                 StartTabView()
                     .environmentObject(myEvents)
-                    .environmentObject(archivedDataStore)  // Provide to child views
+                    .environmentObject(archivedDataStore)
+                    .environmentObject(appSettings)
             } else {
                 OnboardingView()
                     .environmentObject(myEvents)
                     .environmentObject(archivedDataStore)
+                    .environmentObject(appSettings)
             }
         }
     }

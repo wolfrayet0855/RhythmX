@@ -1,5 +1,4 @@
 //  OnboardingView.swift
-//
 
 import SwiftUI
 
@@ -8,66 +7,69 @@ struct OnboardingView: View {
     @AppStorage("didFinishOnboarding") var didFinishOnboarding = false
     @AppStorage("selectedTab") var selectedTab = 0
 
-    // Toggling this to true will push GettingStartedView onto this NavStack
-    @State private var navigateToGetStarted = false
-
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 24) {
-                Text("Welcome to Rhythm(x)!")
-                    .font(.largeTitle)
-                    .bold()
-                    .padding(.top, 40)
+        VStack(spacing: DS.Spacing.lg) {
+            Spacer()
 
-                Text("Generate cycle events, track tags, and learn about phases.")
-                    .font(.headline)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal)
+            Image(systemName: "circle.hexagongrid.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 72)
+                .foregroundColor(.accentColor)
 
-                // High energy note about data privacy
-                Text("Your privacy rocks – we NEVER collect your data! Let's keep your rhythm free and safe!")
-                    .font(.subheadline)
-                    .foregroundColor(.black)
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal)
+            Text("Rhythm(x)")
+                .font(DS.Font.displayTitle)
+                .foregroundColor(DS.Color.primaryText)
 
-                Image(systemName: "circlebadge.2.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 80)
-                    .padding(.bottom, 24)
+            Text("Track your cycle phases, add personal notes, and spot patterns in your health over time.")
+                .font(DS.Font.body)
+                .foregroundColor(DS.Color.secondaryText)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, DS.Spacing.xl)
 
-                // "Continue" goes to GettingStartedView (back button is not hidden)
-                Button("Continue") {
-                    navigateToGetStarted = true
-                }
-                .buttonStyle(.borderedProminent)
-                .padding(.bottom, 40)
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+                featureRow(icon: "calendar.badge.plus", text: "Auto-generate phase events")
+                featureRow(icon: "tag",                  text: "Add custom tags to any day")
+                featureRow(icon: "chart.bar",            text: "Archive and review past cycles")
             }
-            .padding()
-    
-            // A "Skip" or "Done" approach in the top-right, if user doesn't want to see steps
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Skip") {
-                        // Let user skip everything, set onboarding done,
-                        // and jump them to the Settings tab if you like
-                        selectedTab = 2
-                        didFinishOnboarding = true
-                    }
+            .padding(.horizontal, DS.Spacing.xl)
+
+            Spacer()
+
+            VStack(spacing: DS.Spacing.sm) {
+                PrimaryButton(title: "Get Started") {
+                    didFinishOnboarding = true
+                    selectedTab = 2
+                }
+
+                SecondaryButton(title: "Skip") {
+                    didFinishOnboarding = true
+                    selectedTab = 2
                 }
             }
-            // Push to GettingStartedView
-            .navigationDestination(isPresented: $navigateToGetStarted) {
-                GettingStartedView()
-            }
+            .padding(.horizontal, DS.Spacing.md)
+
+            Text("Your data never leaves your device.")
+                .font(DS.Font.micro)
+                .foregroundColor(DS.Color.tertiaryText)
+                .padding(.bottom, DS.Spacing.md)
+        }
+        .background(DS.Color.pageBackground.ignoresSafeArea())
+    }
+
+    private func featureRow(icon: String, text: String) -> some View {
+        HStack(spacing: DS.Spacing.sm) {
+            Image(systemName: icon)
+                .foregroundColor(.accentColor)
+                .frame(width: DS.Spacing.lg)
+            Text(text)
+                .font(DS.Font.label)
+                .foregroundColor(DS.Color.primaryText)
         }
     }
 }
 
-struct OnboardingView_Previews: PreviewProvider {
-    static var previews: some View {
-        OnboardingView()
-            .environmentObject(EventStore())
-    }
+#Preview {
+    OnboardingView()
+        .environmentObject(EventStore())
 }

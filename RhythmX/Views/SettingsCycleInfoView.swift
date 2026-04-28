@@ -18,12 +18,6 @@ struct SettingsCycleInfoView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text("Getting Started")) {
-                    NavigationLink("Let’s Get Started") {
-                        GettingStartedView()
-                    }
-                }
-
                 Section(header: Text("Menstrual Phases Info")) {
                     NavigationLink("Learn more about phases") {
                         PhasesFactsView()
@@ -41,30 +35,24 @@ struct SettingsCycleInfoView: View {
                     header: Text("Generate Events"),
                     footer: Text("Clears current events (with archive option) and generates new ones for the upcoming cycle.")
                 ) {
-                    Button {
+                    PrimaryButton(title: "Generate Cycle Events") {
                         if eventStore.events.isEmpty {
                             generateEventsAndAlert()
                         } else {
                             showArchivePrompt = true
                         }
-                    } label: {
-                        Text("Generate Cycle Events")
-                            .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(.borderedProminent)
+                    .listRowInsets(EdgeInsets(top: DS.Spacing.sm, leading: DS.Spacing.md, bottom: DS.Spacing.sm, trailing: DS.Spacing.md))
+                    .listRowBackground(Color.clear)
                 }
 
                 Section(header: Text("Archive & Insights")) {
                     NavigationLink("View Archived Data") {
                         ArchivedDataView()
                     }
-
-                    NavigationLink("Visualization") {
-                        ArchivedDataSymptomVisualizationView()
-                    }
                 }
             }
-            .navigationTitle("Settings")
+            .navigationTitle("Manage")
             .alert("Cycle Events Generated", isPresented: $showCycleGeneratedAlert) {
                 Button("OK") {
                     eventStore.reloadCalendarIcons()

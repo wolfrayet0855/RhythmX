@@ -5,6 +5,11 @@
 import Foundation
 import SwiftUI
 
+enum PersistenceKeys {
+    static let events = "com.example.rhythm(x).events"
+    static let archivedData = "com.example.rhythm(x).archivedData"
+}
+
 @MainActor
 class EventStore: ObservableObject {
     @Published var events = [Event]()
@@ -13,10 +18,11 @@ class EventStore: ObservableObject {
     @Published var movedEvent: Event?
     
     // Key for storing current events in UserDefaults
-    private let eventsKey = "com.example.rhythm(x).events"
+    private let eventsKey = PersistenceKeys.events
 
     // MARK: - NEW: For immediate calendar reload
     @Published var shouldReloadAll: Bool = false
+    @Published var persistenceError: String? = nil
 
     init(preview: Bool = false) {
         self.preview = preview
@@ -115,7 +121,7 @@ class EventStore: ObservableObject {
             let decoded = try JSONDecoder().decode([Event].self, from: data)
             self.events = decoded
         } catch {
-            print("Error decoding events: \(error)")
+            persistenceError = "Could not load your events. Your data may be corrupted."
         }
     }
 
