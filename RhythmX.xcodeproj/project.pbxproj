@@ -47,16 +47,18 @@
 		D9945CA14EF17691DB32487C /* CyclePredictionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74FF00D330A0CB7B84F64CAE /* CyclePredictionService.swift */; };
 		E114FC1859FA5D3C217A7680 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E4EB6BB0CA0600D178B5EB2 /* SettingsView.swift */; };
 		F7B515E09D3F62EAF8CA3600 /* SecondaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29867D871BE4B5D650A3F356 /* SecondaryButton.swift */; };
+		2B956230AE7849A38BBAF332 /* ICSExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9CB90A1309A46BBA6EB5152 /* ICSExporter.swift */; };
+		AB50CAA54EE146CEA37966D4 /* ShareRhythmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21B1173032E64822874E0CBC /* ShareRhythmView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		06F4E436DA74D831B75AAA2A /* InsightsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
-		4C610311324947E6A079D057 /* InsightsViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InsightsViewModel.swift; sourceTree = "<group>"; };
 		29867D871BE4B5D650A3F356 /* SecondaryButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SecondaryButton.swift; path = Components/SecondaryButton.swift; sourceTree = "<group>"; };
 		3E4EB6BB0CA0600D178B5EB2 /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		42C348EB1E3479891C7797B3 /* DesignSystem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
 		4407384B1D4A0F834A4466D0 /* PredictionBannerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PredictionBannerView.swift; path = Components/PredictionBannerView.swift; sourceTree = "<group>"; };
 		45EF4384CAAB58441BC28DB5 /* ChipButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ChipButton.swift; path = Components/ChipButton.swift; sourceTree = "<group>"; };
+		4C610311324947E6A079D057 /* InsightsViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InsightsViewModel.swift; sourceTree = "<group>"; };
 		573AF1AB29910FA1DA430223 /* TagLibrary.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TagLibrary.swift; sourceTree = "<group>"; };
 		653482AB1E702002917BC302 /* Color+Hex.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
 		74FF00D330A0CB7B84F64CAE /* CyclePredictionService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CyclePredictionService.swift; path = Services/CyclePredictionService.swift; sourceTree = "<group>"; };
@@ -92,6 +94,8 @@
 		BAE70621E110F02513CBF8A4 /* PrimaryButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PrimaryButton.swift; path = Components/PrimaryButton.swift; sourceTree = "<group>"; };
 		E3E8697ACACE102A75C39FC9 /* AppSettings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		EB0F884432EB83252493DE86 /* PhaseCardHeader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PhaseCardHeader.swift; path = Components/PhaseCardHeader.swift; sourceTree = "<group>"; };
+		B9CB90A1309A46BBA6EB5152 /* ICSExporter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ICSExporter.swift; path = Services/ICSExporter.swift; sourceTree = "<group>"; };
+		21B1173032E64822874E0CBC /* ShareRhythmView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ShareRhythmView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -203,6 +207,7 @@
 				06F4E436DA74D831B75AAA2A /* InsightsView.swift */,
 				4C610311324947E6A079D057 /* InsightsViewModel.swift */,
 				3E4EB6BB0CA0600D178B5EB2 /* SettingsView.swift */,
+				21B1173032E64822874E0CBC /* ShareRhythmView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -242,6 +247,7 @@
 			children = (
 				74FF00D330A0CB7B84F64CAE /* CyclePredictionService.swift */,
 				98956941C504966F184775E7 /* NotificationScheduler.swift */,
+				B9CB90A1309A46BBA6EB5152 /* ICSExporter.swift */,
 			);
 			name = Services;
 			sourceTree = "<group>";
@@ -354,6 +360,8 @@
 				7AE4A6DBC82D46C4BF921BDA /* InsightsViewModel.swift in Sources */,
 				E114FC1859FA5D3C217A7680 /* SettingsView.swift in Sources */,
 				AA43F2F932D4A01DC0EBD723 /* PredictionBannerView.swift in Sources */,
+				2B956230AE7849A38BBAF332 /* ICSExporter.swift in Sources */,
+				AB50CAA54EE146CEA37966D4 /* ShareRhythmView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,7 +514,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = beta.Rhythm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -546,7 +554,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7;
+				MARKETING_VERSION = 1.8;
 				PRODUCT_BUNDLE_IDENTIFIER = beta.Rhythm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

@@ -20,6 +20,7 @@ struct PhaseCardHeader: View {
                 Text(phase.displayName)
                     .font(DS.Font.sectionHeader)
                     .foregroundColor(DS.Color.primaryText)
+                    .textCase(nil)
 
                 Text(
                     startDate.formatted(date: .abbreviated, time: .omitted)
@@ -28,6 +29,7 @@ struct PhaseCardHeader: View {
                 )
                 .font(DS.Font.caption)
                 .foregroundColor(DS.Color.secondaryText)
+                .textCase(nil)
             }
 
             Spacer()

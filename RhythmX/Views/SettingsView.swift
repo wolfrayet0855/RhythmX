@@ -12,6 +12,7 @@ struct SettingsView: View {
             Form {
                 phaseColorsSection
                 notificationsSection
+                shareSection
                 aboutSection
             }
             .navigationTitle("Settings")
@@ -84,6 +85,15 @@ struct SettingsView: View {
                         .font(DS.Font.caption)
                         .foregroundColor(.orange)
                 }
+            }
+        }
+    }
+
+    // MARK: - Share
+    private var shareSection: some View {
+        Section(header: Text("Share")) {
+            NavigationLink("Share Rhythm") {
+                ShareRhythmView()
             }
         }
     }

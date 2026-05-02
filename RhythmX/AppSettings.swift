@@ -16,6 +16,7 @@ final class AppSettings: ObservableObject {
 
     // Flags
     @AppStorage("hasPromptedNotifications") var hasPromptedNotifications: Bool = false
+    @AppStorage("sharerName") var sharerName: String = ""
 
     func phaseColor(for phase: Event.EventType) -> Color {
         let hex: String
