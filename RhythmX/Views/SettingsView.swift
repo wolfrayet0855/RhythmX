@@ -100,7 +100,7 @@ struct SettingsView: View {
                     .font(DS.Font.label)
                     .foregroundColor(DS.Color.primaryText)
                 Spacer()
-                Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "—")
+                Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "-")
                     .font(DS.Font.caption)
                     .foregroundColor(DS.Color.secondaryText)
             }

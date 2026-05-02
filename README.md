@@ -1,6 +1,6 @@
 # Rhythm(x) – README
 
-Welcome to **Rhythm(x)**, an iOS app that helps you track menstrual cycle phases, add freeform tags (like moods, dietary notes, etc.), and archive past cycles for future reference. Our goal is to make cycle tracking simpler and more intuitive—helping you spot patterns and stay in tune with your body.
+Welcome to **Rhythm(x)**, an iOS app that helps you track menstrual cycle phases, add freeform tags (like moods, dietary notes, etc.), and archive past cycles for future reference. Our goal is to make cycle tracking simpler and more intuitive-helping you spot patterns and stay in tune with your body.
 
 ---
 
@@ -32,8 +32,8 @@ Welcome to **Rhythm(x)**, an iOS app that helps you track menstrual cycle phases
 
 ## Getting Started
 
-1. **Clone or download** this repository.  
-2. **Open the project in Xcode 14+**.  
+1. **Clone or download** this repository.
+2. **Open the project in Xcode 14+**.
 3. **Run** on an iOS 16 simulator or device.
 
 On first launch, you’ll see the **Onboarding** screen. Follow the steps to learn how to generate cycle events and add tags, or skip straight to the main interface. Once in the app, use the **Settings** tab to generate your first cycle and dive into all the features.
@@ -56,11 +56,11 @@ On first launch, you’ll see the **Onboarding** screen. Follow the steps to lea
 
 ## Contributing
 
-We welcome contributions of all kinds—bug reports, feature enhancements, or documentation improvements. Here’s how you can help:
+We welcome contributions of all kinds-bug reports, feature enhancements, or documentation improvements. Here’s how you can help:
 
-1. **Fork** this repo and create a feature branch.  
-2. Make your changes.  
-3. **Open a Pull Request** describing what you’ve done.  
+1. **Fork** this repo and create a feature branch.
+2. Make your changes.
+3. **Open a Pull Request** describing what you’ve done.
 4. We’ll review and merge or suggest changes.
 
 ---
@@ -69,8 +69,8 @@ We welcome contributions of all kinds—bug reports, feature enhancements, or do
 
 Encountered a bug or have a suggestion? Please open an **Issue** in this repository. Include:
 
-- Steps to reproduce the problem (if any)  
-- iOS version and device model  
+- Steps to reproduce the problem (if any)
+- iOS version and device model
 - Logs or screenshots to help illustrate the issue
 
 We’ll do our best to address it quickly.
@@ -80,5 +80,3 @@ We’ll do our best to address it quickly.
 ## License
 
 This project is licensed under the [Apache License, Version 2.0](LICENSE). See the [LICENSE](LICENSE) file for details.
-
-

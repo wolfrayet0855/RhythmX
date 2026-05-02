@@ -5,6 +5,7 @@ import SwiftUI
 struct EventsListView: View {
     @EnvironmentObject var myEvents: EventStore
     @State private var showTagForm = false
+    @State private var editingPhase: Event.EventType? = nil
 
     var body: some View {
         NavigationStack {
@@ -18,8 +19,10 @@ struct EventsListView: View {
             .navigationTitle("Tag Management")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        showTagForm.toggle()
+                    Menu {
+                        Button("Add New Tag") {
+                            showTagForm = true
+                        }
                     } label: {
                         Image(systemName: "plus.circle.fill")
                             .imageScale(.medium)
@@ -28,6 +31,9 @@ struct EventsListView: View {
             }
             .sheet(isPresented: $showTagForm) {
                 TagFormView()
+            }
+            .sheet(item: $editingPhase) { phase in
+                PhaseTagEditorSheet(phase: phase)
             }
         }
     }
@@ -51,17 +57,21 @@ struct EventsListView: View {
                                         Text("Tags: \(combinedTags)")
                                             .font(DS.Font.caption)
                                             .foregroundColor(.accentColor)
+                                    } else {
+                                        Text("No tags yet - tap + to add")
+                                            .font(DS.Font.caption)
+                                            .foregroundColor(DS.Color.secondaryText)
                                     }
                                 }
                                 Spacer()
-                            }
-                            .swipeActions {
-                                Button(role: .destructive) {
-                                    deleteAll(phaseEvents)
+                                Button {
+                                    editingPhase = phase
                                 } label: {
-                                    Image(systemName: "trash")
+                                    Image(systemName: "pencil.circle")
+                                        .foregroundColor(.accentColor)
+                                        .imageScale(.large)
                                 }
-                                .accessibilityLabel("Delete")
+                                .buttonStyle(.plain)
                             }
                         }
                     } header: {
@@ -97,9 +107,71 @@ struct EventsListView: View {
         }
     }
 
-    private func deleteAll(_ events: [Event]) {
-        for e in events {
-            myEvents.delete(e)
+
+}
+
+// MARK: - Phase Tag Editor Sheet
+private struct PhaseTagEditorSheet: View {
+    let phase: Event.EventType
+    @EnvironmentObject var myEvents: EventStore
+    @Environment(\.dismiss) var dismiss
+
+    @State private var editingTags: [String: String] = [:]
+
+    private var phaseEvents: [Event] {
+        myEvents.events.filter { $0.eventType == phase }.sorted { $0.date < $1.date }
+    }
+
+    private func tagBinding(for event: Event) -> Binding<String> {
+        Binding(
+            get: { editingTags[event.id] ?? event.tags },
+            set: { editingTags[event.id] = $0 }
+        )
+    }
+
+    var body: some View {
+        NavigationStack {
+            List {
+                Section {
+                    Text("Category:Value, comma-separated - e.g. Symptom:Cramps")
+                        .font(DS.Font.micro)
+                        .foregroundColor(DS.Color.secondaryText)
+                        .listRowBackground(Color.clear)
+                }
+
+                ForEach(phaseEvents) { event in
+                    Section {
+                        TextField("Tags", text: tagBinding(for: event), axis: .vertical)
+                            .lineLimit(2...4)
+                            .font(DS.Font.caption)
+                            .foregroundColor(DS.Color.primaryText)
+                    } header: {
+                        Text(event.date.formatted(date: .abbreviated, time: .omitted))
+                            .font(DS.Font.micro)
+                    }
+                }
+            }
+            .listStyle(.insetGrouped)
+            .navigationTitle("Edit \(phase.displayName) Tags")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        for event in phaseEvents {
+                            if let newTags = editingTags[event.id] {
+                                var updated = event
+                                updated.tags = newTags
+                                myEvents.update(updated)
+                            }
+                        }
+                        dismiss()
+                    }
+                    .font(DS.Font.label.weight(.semibold))
+                }
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                }
+            }
         }
     }
 }

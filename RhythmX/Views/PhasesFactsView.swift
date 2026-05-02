@@ -29,7 +29,7 @@ Hormones: Levels of estrogen and progesterone are relatively low at the start of
 Uterine Lining: The endometrium (uterine lining) sheds, leading to menstrual bleeding.
 
 Pregnancy Probability
-Very Low: Since menstruation generally marks the beginning of a new cycle and ovulation is still roughly 10–14 days away, the probability of becoming pregnant is minimal during this time. However, it is not absolutely zero—especially if someone has a shorter cycle or if sperm remains viable in the reproductive tract for several days.
+Very Low: Since menstruation generally marks the beginning of a new cycle and ovulation is still roughly 10–14 days away, the probability of becoming pregnant is minimal during this time. However, it is not absolutely zero-especially if someone has a shorter cycle or if sperm remains viable in the reproductive tract for several days.
 
 Common Mood & Symptoms
 Mood: Some individuals may experience relief from premenstrual syndrome (PMS) symptoms once bleeding begins, while others might still feel mood fluctuations (cramps, fatigue, irritability).

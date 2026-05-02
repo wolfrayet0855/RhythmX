@@ -4,7 +4,6 @@ import SwiftUI
 
 struct GettingStartedView: View {
     @AppStorage("didFinishOnboarding") var didFinishOnboarding = false
-    @AppStorage("selectedTab") var selectedTab = 0
     @Environment(\.dismiss) private var dismiss
 
     private let steps: [(String, String)] = [
@@ -22,26 +21,27 @@ struct GettingStartedView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: DS.Spacing.lg) {
+            VStack(alignment: .leading, spacing: DS.Spacing.sm) {
                 ForEach(Array(steps.enumerated()), id: \.offset) { index, step in
-                    HStack(alignment: .top, spacing: DS.Spacing.md) {
+                    HStack(alignment: .top, spacing: DS.Spacing.sm) {
                         Text("\(index + 1)")
-                            .font(DS.Font.label.weight(.bold))
+                            .font(.system(size: 12, weight: .bold))
                             .foregroundColor(.white)
-                            .frame(width: DS.Spacing.lg, height: DS.Spacing.lg)
+                            .frame(width: 22, height: 22)
                             .background(Color.accentColor)
                             .clipShape(Circle())
 
-                        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                        VStack(alignment: .leading, spacing: 2) {
                             Text(step.0)
-                                .font(DS.Font.sectionHeader)
+                                .font(DS.Font.label.weight(.semibold))
                                 .foregroundColor(DS.Color.primaryText)
                             Text(step.1)
-                                .font(DS.Font.body)
+                                .font(DS.Font.caption)
                                 .foregroundColor(DS.Color.secondaryText)
                         }
                     }
-                    .padding(DS.Spacing.md)
+                    .padding(.horizontal, DS.Spacing.md)
+                    .padding(.vertical, DS.Spacing.sm)
                     .background(DS.Color.cardBackground)
                     .cornerRadius(DS.Radius.card)
                 }
@@ -55,7 +55,6 @@ struct GettingStartedView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Done") {
                     didFinishOnboarding = true
-                    selectedTab = 2
                     dismiss()
                 }
                 .font(DS.Font.label.weight(.semibold))

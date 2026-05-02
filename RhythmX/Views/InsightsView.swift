@@ -1,32 +1,35 @@
-//  InsightsView.swift
-
+// RhythmX/Views/InsightsView.swift
 import SwiftUI
 import Charts
 
 struct InsightsView: View {
     @EnvironmentObject var archivedDataStore: ArchivedDataStore
     @EnvironmentObject var myEvents: EventStore
+    @EnvironmentObject var appSettings: AppSettings
 
     @State private var selectedPhase: Event.EventType? = nil
 
     var body: some View {
-        NavigationStack {
+        let vm = InsightsViewModel(
+            events: myEvents.events,
+            archivedBlocks: archivedDataStore.archivedBlocks,
+            appSettings: appSettings
+        )
+        return NavigationStack {
             ScrollView {
-                if archivedDataStore.archivedBlocks.isEmpty && myEvents.events.isEmpty {
+                if vm.events.isEmpty && vm.archivedBlocks.isEmpty {
                     emptyState
                 } else {
                     VStack(alignment: .leading, spacing: DS.Spacing.xl) {
-                        if !archivedDataStore.archivedBlocks.isEmpty {
-                            tagFrequencyChart
-                            Divider()
-                            cycleLengthChart
-                            Divider()
-                        }
-                        if !myEvents.events.isEmpty {
-                            fertilityWindowChart
-                            Divider()
-                            cervicalMucusChart
-                        }
+                        tagFrequencyChart(vm)
+                        Divider()
+                        tagsOverMonthChart(vm)
+                        Divider()
+                        tagCategoryDonut(vm)
+                        Divider()
+                        fertilityWindowChart(vm)
+                        Divider()
+                        cervicalMucusChart(vm)
                     }
                     .padding(DS.Spacing.md)
                 }
@@ -38,6 +41,7 @@ struct InsightsView: View {
     }
 
     // MARK: - Empty State
+
     private var emptyState: some View {
         VStack(spacing: DS.Spacing.md) {
             Spacer(minLength: DS.Spacing.xxl)
@@ -56,149 +60,319 @@ struct InsightsView: View {
         }
     }
 
-    // MARK: - Chart 1: Tag Frequency by Phase
-    private var tagFrequencyChart: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text("Tag Frequency by Phase")
+    // MARK: - Chart 1: Tag Breakdown by Phase
+
+    @ViewBuilder
+    private func tagFrequencyChart(_ vm: InsightsViewModel) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.md) {
+            Text("Tag Breakdown by Phase")
                 .font(DS.Font.sectionHeader)
                 .foregroundColor(DS.Color.primaryText)
-            Text("Total tags logged per phase across all archived cycles.")
+            Text("Category mix per phase. Tap a phase number to see its top tags.")
                 .font(DS.Font.caption)
                 .foregroundColor(DS.Color.secondaryText)
 
-            Chart {
-                ForEach(tagFrequencyData, id: \.phase) { item in
+            let data = vm.stackedTagData
+            if data.isEmpty {
+                placeholderCard(icon: "tag",
+                    message: "Log tags on your events to see which symptoms appear most in each phase.")
+            } else {
+                Chart(data) { item in
                     BarMark(
-                        x: .value("Phase", item.phaseName),
-                        y: .value("Tags", item.count)
+                        x: .value("Percent", item.percentage),
+                        y: .value("Phase", item.phaseName)
                     )
-                    .foregroundStyle(item.color)
-                    .cornerRadius(4)
+                    .foregroundStyle(by: .value("Category", item.categoryName))
+                    .cornerRadius(2)
                 }
-            }
-            .frame(height: 200)
+                .chartForegroundStyleScale([
+                    "Symptom": DS.Color.phase1Default, "Mood": DS.Color.phase4Default,
+                    "Dietary": DS.Color.phase3Default, "Exercise": DS.Color.phase2Default,
+                    "Medication": Color.gray, "Cervical Mucus": Color.teal,
+                    "Other": Color.gray.opacity(0.4)
+                ])
+                .chartXScale(domain: 0...100)
+                .chartXAxis {
+                    AxisMarks(values: [0, 25, 50, 75, 100]) { value in
+                        AxisValueLabel { if let v = value.as(Int.self) { Text("\(v)%").font(.caption2) } }
+                        AxisGridLine()
+                    }
+                }
+                .chartLegend(.hidden)
+                .frame(height: 130)
 
-            if let phase = selectedPhase {
-                let top = topTags(for: phase)
-                if !top.isEmpty {
-                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                        Text("Top tags — \(phase.displayName)")
-                            .font(DS.Font.caption.weight(.semibold))
-                            .foregroundColor(DS.Color.primaryText)
-                        ForEach(top, id: \.tag) { item in
-                            HStack {
-                                Text(item.tag)
-                                    .font(DS.Font.caption)
-                                    .foregroundColor(DS.Color.primaryText)
-                                Spacer()
-                                Text("\(item.count)×")
-                                    .font(DS.Font.micro)
-                                    .foregroundColor(DS.Color.secondaryText)
+                HStack(spacing: DS.Spacing.md) {
+                    ForEach(Event.EventType.allCases, id: \.self) { phase in
+                        if !vm.topTagsForPhase(phase).isEmpty {
+                            Button {
+                                selectedPhase = selectedPhase == phase ? nil : phase
+                            } label: {
+                                HStack(spacing: DS.Spacing.xs) {
+                                    PhaseNumberBadge(phase: phase)
+                                    Image(systemName: selectedPhase == phase ? "chevron.up" : "chevron.down")
+                                        .font(.caption2)
+                                        .foregroundColor(DS.Color.secondaryText)
+                                }
                             }
                         }
                     }
-                    .padding(DS.Spacing.sm)
-                    .background(DS.Color.cardBackground)
-                    .cornerRadius(DS.Radius.chip)
+                    Spacer()
                 }
-            }
 
-            HStack(spacing: DS.Spacing.md) {
-                ForEach(Event.EventType.allCases, id: \.self) { phase in
-                    Button {
-                        selectedPhase = selectedPhase == phase ? nil : phase
-                    } label: {
+                if let phase = selectedPhase {
+                    let top = vm.topTagsForPhase(phase)
+                    if !top.isEmpty {
+                        VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                            Text("Top tags - \(phase.displayName)")
+                                .font(DS.Font.caption.weight(.semibold))
+                                .foregroundColor(DS.Color.primaryText)
+                            ForEach(top) { item in
+                                HStack {
+                                    Text(item.shortTag).font(DS.Font.caption).foregroundColor(DS.Color.primaryText)
+                                    Spacer()
+                                    Text("\(item.count)×").font(DS.Font.micro).foregroundColor(DS.Color.secondaryText)
+                                }
+                            }
+                        }
+                        .padding(DS.Spacing.sm)
+                        .background(DS.Color.cardBackground)
+                        .cornerRadius(DS.Radius.chip)
+                    }
+                }
+
+                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: DS.Spacing.xs) {
+                    ForEach(vm.categoryLegendItems, id: \.name) { item in
                         HStack(spacing: DS.Spacing.xs) {
-                            Circle()
-                                .fill(phase.phaseColor)
-                                .frame(width: 10, height: 10)
-                            Text("Phase \(phase.phaseNumber)")
-                                .font(DS.Font.micro)
-                                .foregroundColor(DS.Color.secondaryText)
+                            RoundedRectangle(cornerRadius: 2).fill(item.color).frame(width: 10, height: 10)
+                            Text(item.name).font(DS.Font.micro).foregroundColor(DS.Color.secondaryText)
+                            Spacer()
                         }
                     }
                 }
+                .padding(.top, DS.Spacing.xs)
             }
         }
     }
 
-    // MARK: - Chart 2: Cycle Length Over Time
+    // MARK: - Chart 1b: Tags Over the Month
+
     @ViewBuilder
-    private var cycleLengthChart: some View {
+    private func tagsOverMonthChart(_ vm: InsightsViewModel) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text("Cycle Length Over Time")
+            Text("Tags Over the Month")
                 .font(DS.Font.sectionHeader)
                 .foregroundColor(DS.Color.primaryText)
-
-            if cycleLengthData.count < 2 {
-                placeholderCard(
-                    icon: "waveform.path.ecg",
-                    message: "Archive 2 or more cycles to see length trends."
-                )
-            } else {
-                let avg = cycleLengthData.map(\.days).reduce(0, +) / cycleLengthData.count
-                Text("Average: \(avg) days")
-                    .font(DS.Font.caption)
-                    .foregroundColor(DS.Color.secondaryText)
-
-                Chart {
-                    ForEach(cycleLengthData) { item in
-                        LineMark(
-                            x: .value("Cycle", item.label),
-                            y: .value("Days", item.days)
-                        )
-                        .foregroundStyle(Color.accentColor)
-                        .symbol(.circle)
-                    }
-                    RuleMark(y: .value("Average", avg))
-                        .foregroundStyle(Color.accentColor.opacity(0.3))
-                        .lineStyle(StrokeStyle(lineWidth: 1, dash: [4]))
-                }
-                .frame(height: 180)
-            }
-        }
-    }
-
-    // MARK: - Chart 3: Fertility Window
-    @ViewBuilder
-    private var fertilityWindowChart: some View {
-        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
-            Text("Fertility Window")
-                .font(DS.Font.sectionHeader)
-                .foregroundColor(DS.Color.primaryText)
-            Text("Ovulation day and fertile days in your current cycle.")
+            Text("Tags logged per cycle day, colored by phase.")
                 .font(DS.Font.caption)
                 .foregroundColor(DS.Color.secondaryText)
 
-            let segments = fertilitySegments
-            if segments.isEmpty {
-                placeholderCard(icon: "circle.dotted", message: "Generate a cycle to see your fertility window.")
+            let data = vm.dailyTagData
+            if data.isEmpty && vm.tagsOverMonthAverageLine.isEmpty {
+                placeholderCard(icon: "calendar.badge.plus",
+                    message: "Log tags on event days to see your monthly pattern.")
             } else {
-                Chart(segments) { seg in
-                    SectorMark(
-                        angle: .value("Days", seg.days),
-                        innerRadius: .ratio(0.5),
-                        angularInset: 1.5
-                    )
-                    .foregroundStyle(seg.color)
-                    .cornerRadius(4)
+                Chart {
+                    ForEach(data) { item in
+                        BarMark(x: .value("Day", item.cycleDay), y: .value("Tags", item.count))
+                            .foregroundStyle(item.color)
+                            .cornerRadius(3)
+                    }
+                    ForEach(vm.tagsOverMonthAverageLine) { point in
+                        LineMark(
+                            x: .value("Day", point.cycleDay),
+                            y: .value("Avg", point.average)
+                        )
+                        .foregroundStyle(DS.Color.secondaryText.opacity(0.4))
+                        .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [4]))
+                    }
                 }
-                .frame(height: 200)
+                .frame(height: 150)
+                .chartXAxis {
+                    AxisMarks(preset: .aligned) { value in
+                        if let v = value.as(Int.self), v % 5 == 0 || v == 1 {
+                            AxisValueLabel { Text("Day \(v)").font(.caption2) }
+                        }
+                        AxisGridLine()
+                    }
+                }
+                .chartYAxis {
+                    AxisMarks(position: .leading) { value in
+                        AxisValueLabel().font(.caption2)
+                        AxisGridLine()
+                    }
+                }
 
                 VStack(alignment: .leading, spacing: DS.Spacing.xs) {
-                    ForEach(segments) { seg in
-                        HStack(spacing: DS.Spacing.sm) {
-                            RoundedRectangle(cornerRadius: 3)
-                                .fill(seg.color)
-                                .frame(width: 14, height: 14)
-                            Text(seg.label)
-                                .font(DS.Font.caption)
-                                .foregroundColor(DS.Color.primaryText)
-                            Spacer()
-                            Text("\(seg.days) days")
-                                .font(DS.Font.micro)
-                                .foregroundColor(DS.Color.secondaryText)
+                    HStack(spacing: DS.Spacing.md) {
+                        ForEach(Event.EventType.allCases, id: \.self) { phase in
+                            HStack(spacing: DS.Spacing.xs) {
+                                RoundedRectangle(cornerRadius: 2)
+                                    .fill(appSettings.phaseColor(for: phase))
+                                    .frame(width: 10, height: 10)
+                                Text(phase.rawValue.capitalized)
+                                    .font(DS.Font.micro)
+                                    .foregroundColor(DS.Color.secondaryText)
+                                    .fixedSize()
+                            }
                         }
+                    }
+                    if !vm.tagsOverMonthAverageLine.isEmpty {
+                        HStack(spacing: DS.Spacing.xs) {
+                            Path { path in
+                                path.move(to:    CGPoint(x: 0, y: 5))
+                                path.addLine(to: CGPoint(x: 14, y: 5))
+                            }
+                            .stroke(DS.Color.secondaryText.opacity(0.4),
+                                    style: StrokeStyle(lineWidth: 1.5, dash: [4]))
+                            .frame(width: 14, height: 10)
+                            Text("Dashed = archived average")
+                                .font(DS.Font.micro).foregroundColor(DS.Color.secondaryText)
+                        }
+                    }
+                }
+                .padding(.top, DS.Spacing.xs)
+            }
+        }
+    }
+
+    // MARK: - Chart 1c: Tag Category Mix
+
+    @ViewBuilder
+    private func tagCategoryDonut(_ vm: InsightsViewModel) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            Text("Tag Category Mix")
+                .font(DS.Font.sectionHeader)
+                .foregroundColor(DS.Color.primaryText)
+            Text("Overall breakdown of everything you've tracked.")
+                .font(DS.Font.caption)
+                .foregroundColor(DS.Color.secondaryText)
+
+            let data = vm.tagCategoryTotals
+            if data.isEmpty {
+                placeholderCard(icon: "chart.pie", message: "Log tags to see your category breakdown here.")
+            } else {
+                HStack(alignment: .center, spacing: DS.Spacing.lg) {
+                    Chart(data) { item in
+                        SectorMark(angle: .value("Count", item.count),
+                                   innerRadius: .ratio(0.55), angularInset: 1.5)
+                            .foregroundStyle(item.color)
+                            .cornerRadius(3)
+                    }
+                    .frame(width: 130, height: 130)
+                    VStack(alignment: .leading, spacing: DS.Spacing.xs) {
+                        ForEach(data) { item in
+                            HStack(spacing: DS.Spacing.xs) {
+                                RoundedRectangle(cornerRadius: 2).fill(item.color).frame(width: 10, height: 10)
+                                Text(item.category).font(DS.Font.caption).foregroundColor(DS.Color.primaryText)
+                                Spacer()
+                                Text("\(item.count)").font(DS.Font.micro).foregroundColor(DS.Color.secondaryText)
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+        }
+    }
+
+    // MARK: - Chart 3: Phase Timeline
+
+    @ViewBuilder
+    private func fertilityWindowChart(_ vm: InsightsViewModel) -> some View {
+        VStack(alignment: .leading, spacing: DS.Spacing.sm) {
+            Text("Phase Timeline")
+                .font(DS.Font.sectionHeader)
+                .foregroundColor(DS.Color.primaryText)
+            Text("When each phase occurs across your cycle days.")
+                .font(DS.Font.caption)
+                .foregroundColor(DS.Color.secondaryText)
+
+            let spans = vm.phaseSpans
+            if spans.isEmpty && vm.phaseSpansArchiveAverage.isEmpty {
+                placeholderCard(icon: "calendar.badge.clock",
+                    message: "Generate a cycle to see your phase timeline.")
+            } else {
+                let archiveSpans = vm.phaseSpansArchiveAverage
+                let allSpans = spans + archiveSpans
+                let maxDay = (allSpans.map(\.endDay).max() ?? 30) + 4
+                let hasBoth = !spans.isEmpty && !archiveSpans.isEmpty
+
+                Chart {
+                    ForEach(spans) { span in
+                        BarMark(xStart: .value("Start", span.startDay),
+                                xEnd:   .value("End",   span.endDay),
+                                y:      .value("Phase",  span.label),
+                                height: .fixed(10))
+                            .foregroundStyle(span.color)
+                            .cornerRadius(4)
+                    }
+                    if spans.isEmpty {
+                        ForEach(archiveSpans) { span in
+                            BarMark(xStart: .value("Start", span.startDay),
+                                    xEnd:   .value("End",   span.endDay),
+                                    y:      .value("Phase",  span.label),
+                                    height: .fixed(10))
+                                .foregroundStyle(Color.gray.opacity(0.6))
+                                .cornerRadius(4)
+                        }
+                    }
+                }
+                .chartXScale(domain: 1...maxDay)
+                .chartXAxis {
+                    AxisMarks(preset: .aligned) { value in
+                        if let v = value.as(Int.self), v % 5 == 0 || v == 1 {
+                            AxisValueLabel { Text("Day \(v)").font(.caption2) }
+                        }
+                        AxisGridLine()
+                    }
+                }
+                .chartYAxis(.hidden)
+                .frame(height: 120)
+                .chartOverlay { proxy in
+                    GeometryReader { geo in
+                        if hasBoth, let plotFrameAnchor = proxy.plotFrame {
+                            let plotFrame: CGRect = geo[plotFrameAnchor]
+                            ForEach(archiveSpans) { span in
+                                if let startX = proxy.position(forX: span.startDay),
+                                   let endX   = proxy.position(forX: span.endDay),
+                                   let midY   = proxy.position(forY: span.label) {
+                                    let y = plotFrame.minY + midY - 8
+                                    Path { path in
+                                        path.move(to:    CGPoint(x: plotFrame.minX + startX, y: y))
+                                        path.addLine(to: CGPoint(x: plotFrame.minX + endX,   y: y))
+                                    }
+                                    .stroke(Color.gray,
+                                            style: StrokeStyle(lineWidth: 2, dash: [4, 3]))
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if !spans.isEmpty {
+                    HStack(spacing: DS.Spacing.md) {
+                        ForEach(spans) { span in
+                            HStack(spacing: DS.Spacing.xs) {
+                                RoundedRectangle(cornerRadius: 2).fill(span.color).frame(width: 10, height: 10)
+                                Text("Day \(span.startDay)–\(span.endDay - 1)")
+                                    .font(DS.Font.micro).foregroundColor(DS.Color.secondaryText)
+                            }
+                        }
+                    }
+                    .padding(.top, DS.Spacing.xs)
+
+                    if hasBoth {
+                        HStack(spacing: DS.Spacing.xs) {
+                            Path { path in
+                                path.move(to:    CGPoint(x: 0, y: 5))
+                                path.addLine(to: CGPoint(x: 14, y: 5))
+                            }
+                            .stroke(Color.gray, style: StrokeStyle(lineWidth: 2, dash: [4, 3]))
+                            .frame(width: 14, height: 10)
+                            Text("Dashed = archived average")
+                                .font(DS.Font.micro).foregroundColor(DS.Color.secondaryText)
+                        }
+                        .padding(.top, DS.Spacing.xs)
                     }
                 }
             }
@@ -206,195 +380,105 @@ struct InsightsView: View {
     }
 
     // MARK: - Chart 4: Cervical Mucus
+
     @ViewBuilder
-    private var cervicalMucusChart: some View {
+    private func cervicalMucusChart(_ vm: InsightsViewModel) -> some View {
         VStack(alignment: .leading, spacing: DS.Spacing.sm) {
             Text("Cervical Mucus")
                 .font(DS.Font.sectionHeader)
                 .foregroundColor(DS.Color.primaryText)
-            Text("Mucus consistency logged across cycle days.")
+            Text("Consistency over cycle days - peak signals your fertile window.")
                 .font(DS.Font.caption)
                 .foregroundColor(DS.Color.secondaryText)
 
-            let data = cervicalMucusData
-            if data.isEmpty {
-                placeholderCard(
-                    icon: "drop",
-                    message: "Log cervical mucus tags to track your fertile window here."
-                )
+            let data = vm.cervicalMucusData
+            let archivedData = vm.archivedCervicalMucusAverageData
+            if data.isEmpty && archivedData.isEmpty {
+                placeholderCard(icon: "drop",
+                    message: "Log cervical mucus tags to track your fertile window here.")
             } else {
-                Chart(data) { item in
-                    BarMark(
-                        x: .value("Day", "Day \(item.cycleDay)"),
-                        y: .value("Level", item.level)
-                    )
-                    .foregroundStyle(item.color)
-                    .cornerRadius(2)
+                Chart {
+                    ForEach(archivedData) { item in
+                        LineMark(x: .value("Day", item.cycleDay), y: .value("Level", item.level))
+                            .foregroundStyle(Color.gray.opacity(0.3))
+                            .lineStyle(StrokeStyle(lineWidth: 1.5, dash: [4]))
+                            .interpolationMethod(.catmullRom)
+                        PointMark(x: .value("Day", item.cycleDay), y: .value("Level", item.level))
+                            .foregroundStyle(Color.gray.opacity(0.3))
+                            .symbolSize(40)
+                    }
+                    ForEach(data) { item in
+                        LineMark(x: .value("Day", item.cycleDay), y: .value("Level", item.level))
+                            .foregroundStyle(DS.Color.phase2Default)
+                            .lineStyle(StrokeStyle(lineWidth: 2))
+                            .interpolationMethod(.catmullRom)
+                        PointMark(x: .value("Day", item.cycleDay), y: .value("Level", item.level))
+                            .foregroundStyle(item.color)
+                            .symbolSize(60)
+                    }
                 }
-                .frame(height: 160)
-                .chartYScale(domain: 0...4)
+                .frame(height: 140)
+                .chartYScale(domain: 0...5)
                 .chartYAxis {
                     AxisMarks(values: [1, 2, 3, 4]) { value in
-                        AxisValueLabel {
-                            if let v = value.as(Int.self) {
-                                Text(mucusLevelLabel(v))
-                                    .font(.caption2)
-                            }
+                        if let v = value.as(Int.self) {
+                            AxisValueLabel { Text(vm.mucusLevelLabel(v)).font(.caption2) }
+                            AxisGridLine()
                         }
                     }
+                }
+                .chartXAxis {
+                    AxisMarks(preset: .aligned) { value in
+                        if let v = value.as(Int.self) {
+                            AxisValueLabel { Text("Day \(v)").font(.caption2) }
+                            AxisGridLine()
+                        }
+                    }
+                }
+                HStack(spacing: DS.Spacing.md) {
+                    ForEach([1, 2, 3, 4], id: \.self) { level in
+                        HStack(spacing: DS.Spacing.xs) {
+                            Circle().fill(vm.mucusColor(level)).frame(width: 8, height: 8)
+                            Text(vm.mucusLevelLabel(level))
+                                .font(DS.Font.micro).foregroundColor(DS.Color.secondaryText)
+                        }
+                    }
+                }
+                .padding(.top, DS.Spacing.xs)
+                if !data.isEmpty && !archivedData.isEmpty {
+                    HStack(spacing: DS.Spacing.xs) {
+                        Path { path in
+                            path.move(to:    CGPoint(x: 0, y: 5))
+                            path.addLine(to: CGPoint(x: 14, y: 5))
+                        }
+                        .stroke(Color.gray.opacity(0.3),
+                                style: StrokeStyle(lineWidth: 1.5, dash: [4]))
+                        .frame(width: 14, height: 10)
+                        Text("Dashed = archived average")
+                            .font(DS.Font.micro).foregroundColor(DS.Color.secondaryText)
+                    }
+                    .padding(.top, DS.Spacing.xs)
+                } else if data.isEmpty && !archivedData.isEmpty {
+                    Text("Showing archived cycle averages - log a current cycle to compare.")
+                        .font(DS.Font.micro)
+                        .foregroundColor(DS.Color.secondaryText)
+                        .padding(.top, DS.Spacing.xs)
                 }
             }
         }
     }
 
     // MARK: - Placeholder card
+
     private func placeholderCard(icon: String, message: String) -> some View {
         HStack(spacing: DS.Spacing.md) {
-            Image(systemName: icon)
-                .foregroundColor(DS.Color.secondaryText)
-                .frame(width: DS.Spacing.lg)
-            Text(message)
-                .font(DS.Font.caption)
-                .foregroundColor(DS.Color.secondaryText)
+            Image(systemName: icon).foregroundColor(DS.Color.secondaryText).frame(width: DS.Spacing.lg)
+            Text(message).font(DS.Font.caption).foregroundColor(DS.Color.secondaryText)
         }
         .padding(DS.Spacing.md)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(DS.Color.cardBackground)
         .cornerRadius(DS.Radius.chip)
-    }
-
-    // MARK: - Data models
-    private struct PhaseFrequency {
-        let phase: Event.EventType
-        let phaseName: String
-        let count: Int
-        let color: Color
-    }
-
-    private struct CycleLength: Identifiable {
-        let id = UUID()
-        let label: String
-        let days: Int
-    }
-
-    private struct FertilitySegment: Identifiable {
-        let id = UUID()
-        let label: String
-        let days: Int
-        let color: Color
-    }
-
-    private struct MucusPoint: Identifiable {
-        let id = UUID()
-        let cycleDay: Int
-        let level: Int
-        let color: Color
-    }
-
-    // MARK: - Data helpers
-    private var tagFrequencyData: [PhaseFrequency] {
-        Event.EventType.allCases.map { phase in
-            let count = archivedDataStore.archivedBlocks.flatMap { block in
-                block.groupedEvents.filter { $0.eventType == phase }.flatMap { $0.events }
-            }.reduce(0) { total, event in
-                let tags = event.tags.split(separator: ",").filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
-                return total + tags.count
-            }
-            return PhaseFrequency(phase: phase, phaseName: "Phase \(phase.phaseNumber)", count: count, color: phase.phaseColor)
-        }
-    }
-
-    private func topTags(for phase: Event.EventType) -> [(tag: String, count: Int)] {
-        var freq: [String: Int] = [:]
-        for block in archivedDataStore.archivedBlocks {
-            for p in block.groupedEvents where p.eventType == phase {
-                for event in p.events {
-                    event.tags.split(separator: ",")
-                        .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-                        .filter { !$0.isEmpty }
-                        .forEach { freq[$0, default: 0] += 1 }
-                }
-            }
-        }
-        return freq.sorted { $0.value > $1.value }.prefix(3).map { (tag: $0.key, count: $0.value) }
-    }
-
-    private var cycleLengthData: [CycleLength] {
-        let sorted = archivedDataStore.archivedBlocks.sorted { $0.date < $1.date }
-        return sorted.enumerated().compactMap { (index, block) in
-            let allDates = block.groupedEvents.flatMap { $0.events }.map { $0.date }
-            guard let first = allDates.min(), let last = allDates.max() else { return nil }
-            let days = Calendar.current.dateComponents([.day], from: first, to: last).day.map { $0 + 1 } ?? 0
-            guard days > 0 else { return nil }
-            return CycleLength(label: "Cycle \(index + 1)", days: days)
-        }
-    }
-
-    private var fertilitySegments: [FertilitySegment] {
-        let grouped = Dictionary(grouping: myEvents.events) { $0.eventType }
-        return Event.EventType.allCases.compactMap { phase in
-            guard let events = grouped[phase], !events.isEmpty else { return nil }
-            let label: String
-            switch phase {
-            case .menstrual:  label = "Menstrual"
-            case .follicular: label = "Follicular"
-            case .ovulation:  label = "Fertile Window"
-            case .luteal:     label = "Luteal"
-            }
-            return FertilitySegment(label: label, days: events.count, color: phase.phaseColor)
-        }
-    }
-
-    private var cervicalMucusData: [MucusPoint] {
-        let sorted = myEvents.events.sorted { $0.date < $1.date }
-        guard let firstDate = sorted.first?.date else { return [] }
-        var points: [MucusPoint] = []
-        for event in sorted {
-            let day = Calendar.current.dateComponents([.day], from: firstDate, to: event.date).day.map { $0 + 1 } ?? 1
-            let tags = event.tags.split(separator: ",")
-                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-            for tag in tags {
-                let lower = tag.lowercased()
-                if lower.contains("cervical mucus:") || lower.hasPrefix("cervical mucus") {
-                    let value = tag.split(separator: ":").last.map { String($0).trimmingCharacters(in: .whitespaces) } ?? ""
-                    let level = mucusLevel(value)
-                    if level > 0 {
-                        points.append(MucusPoint(cycleDay: day, level: level, color: mucusColor(level)))
-                    }
-                }
-            }
-        }
-        return points
-    }
-
-    private func mucusLevel(_ value: String) -> Int {
-        switch value.lowercased() {
-        case "dry":        return 1
-        case "sticky":     return 2
-        case "creamy":     return 3
-        case "egg white":  return 4
-        default:           return 0
-        }
-    }
-
-    private func mucusColor(_ level: Int) -> Color {
-        switch level {
-        case 1: return Color.gray.opacity(0.5)
-        case 2: return DS.Color.phase3.opacity(0.6)
-        case 3: return DS.Color.phase3
-        case 4: return DS.Color.phase2
-        default: return .clear
-        }
-    }
-
-    private func mucusLevelLabel(_ level: Int) -> String {
-        switch level {
-        case 1: return "Dry"
-        case 2: return "Sticky"
-        case 3: return "Creamy"
-        case 4: return "Egg White"
-        default: return ""
-        }
     }
 }
 
@@ -402,4 +486,5 @@ struct InsightsView: View {
     InsightsView()
         .environmentObject(ArchivedDataStore())
         .environmentObject(EventStore(preview: true))
+        .environmentObject(AppSettings())
 }

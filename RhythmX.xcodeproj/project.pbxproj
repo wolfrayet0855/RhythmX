@@ -10,6 +10,7 @@
 		1AC7154CDC76D82D5CB03CE0 /* NotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98956941C504966F184775E7 /* NotificationScheduler.swift */; };
 		2F7454A654F0A64FEE080A3C /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C348EB1E3479891C7797B3 /* DesignSystem.swift */; };
 		507F88DFF541A3DF8658DF9E /* InsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06F4E436DA74D831B75AAA2A /* InsightsView.swift */; };
+		7AE4A6DBC82D46C4BF921BDA /* InsightsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C610311324947E6A079D057 /* InsightsViewModel.swift */; };
 		7E5D1A01AD12544571CB9A2E /* ChipButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45EF4384CAAB58441BC28DB5 /* ChipButton.swift */; };
 		897C2630D89B267045968E51 /* TagLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573AF1AB29910FA1DA430223 /* TagLibrary.swift */; };
 		8B636B3D7D30A2FD1AC5FC7E /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3E8697ACACE102A75C39FC9 /* AppSettings.swift */; };
@@ -50,6 +51,7 @@
 
 /* Begin PBXFileReference section */
 		06F4E436DA74D831B75AAA2A /* InsightsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InsightsView.swift; sourceTree = "<group>"; };
+		4C610311324947E6A079D057 /* InsightsViewModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InsightsViewModel.swift; sourceTree = "<group>"; };
 		29867D871BE4B5D650A3F356 /* SecondaryButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SecondaryButton.swift; path = Components/SecondaryButton.swift; sourceTree = "<group>"; };
 		3E4EB6BB0CA0600D178B5EB2 /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		42C348EB1E3479891C7797B3 /* DesignSystem.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 				9A284FB42CA708E20021A785 /* CalendarViewTab */,
 				8A70DF1BBA95FDB5789558B1 /* Components */,
 				06F4E436DA74D831B75AAA2A /* InsightsView.swift */,
+				4C610311324947E6A079D057 /* InsightsViewModel.swift */,
 				3E4EB6BB0CA0600D178B5EB2 /* SettingsView.swift */,
 			);
 			path = Views;
@@ -348,6 +351,7 @@
 				D9945CA14EF17691DB32487C /* CyclePredictionService.swift in Sources */,
 				1AC7154CDC76D82D5CB03CE0 /* NotificationScheduler.swift in Sources */,
 				507F88DFF541A3DF8658DF9E /* InsightsView.swift in Sources */,
+				7AE4A6DBC82D46C4BF921BDA /* InsightsViewModel.swift in Sources */,
 				E114FC1859FA5D3C217A7680 /* SettingsView.swift in Sources */,
 				AA43F2F932D4A01DC0EBD723 /* PredictionBannerView.swift in Sources */,
 			);

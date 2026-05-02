@@ -4,7 +4,6 @@ import SwiftUI
 
 struct ListViewRow: View {
     let event: Event
-    @Binding var formType: EventFormType?
 
     var body: some View {
         HStack(spacing: DS.Spacing.sm) {
@@ -27,12 +26,6 @@ struct ListViewRow: View {
             }
 
             Spacer()
-
-            Button("Edit") {
-                formType = .update(event)
-            }
-            .font(DS.Font.caption.weight(.medium))
-            .foregroundColor(.accentColor)
         }
         .padding(.vertical, DS.Spacing.xs)
     }

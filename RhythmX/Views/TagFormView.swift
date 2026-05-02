@@ -32,7 +32,7 @@ struct TagFormView: View {
     private let phaseSymptomSuggestions: [Event.EventType: [String]] = [
         .menstrual:  ["Cramps", "Bloating", "Fatigue", "Headache", "Irritability"],
         .follicular: ["Increased Energy", "Clearer Thinking", "Higher Libido"],
-        .ovulation:  ["Mittelschmerz", "Egg-White Mucus", "Bloating"],
+        .ovulation:  ["Mittelschmerz", "Bloating", "Mild Cramping"],
         .luteal:     ["Mood Swings", "Breast Tenderness", "Food Cravings", "PMS"]
     ]
 
@@ -108,7 +108,9 @@ struct TagFormView: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: DS.Spacing.sm) {
                                 ForEach(smartTags, id: \.self) { tagString in
-                                    ChipButton(title: tagString) {
+                                    let displayName = tagString.split(separator: ":", maxSplits: 1).last
+                                        .map { String($0).trimmingCharacters(in: .whitespaces) } ?? tagString
+                                    ChipButton(title: displayName) {
                                         applySmartTag(tagString)
                                     }
                                 }
@@ -252,7 +254,7 @@ extension TagFormView {
         let existing = Set(ranked)
         let additional = libTags
             .filter { !existing.contains("\(category.rawValue):\($0)") && !existing.contains($0) }
-            .map { $0 }
+            .map { "\(category.rawValue):\($0)" }
         ranked = Array((ranked + additional).prefix(8))
 
         smartTags = ranked

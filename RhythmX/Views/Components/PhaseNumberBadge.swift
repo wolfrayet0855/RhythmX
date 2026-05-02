@@ -3,6 +3,7 @@
 import SwiftUI
 
 struct PhaseNumberBadge: View {
+    @EnvironmentObject var appSettings: AppSettings
     let phase: Event.EventType
 
     var body: some View {
@@ -11,7 +12,7 @@ struct PhaseNumberBadge: View {
             .foregroundColor(.white)
             .minimumScaleFactor(0.7)
             .frame(width: DS.Spacing.lg, height: DS.Spacing.lg)
-            .background(phase.phaseColor)
+            .background(appSettings.phaseColor(for: phase))
             .clipShape(Circle())
             .accessibilityHidden(true)
     }

@@ -3,6 +3,7 @@
 import SwiftUI
 
 struct PhaseCardHeader: View {
+    @EnvironmentObject var appSettings: AppSettings
     let phase: Event.EventType
     let startDate: Date
     let endDate: Date
@@ -10,7 +11,7 @@ struct PhaseCardHeader: View {
     var body: some View {
         HStack(spacing: DS.Spacing.sm) {
             RoundedRectangle(cornerRadius: 2)
-                .fill(phase.phaseColor)
+                .fill(appSettings.phaseColor(for: phase))
                 .frame(width: 4, height: 36)
 
             PhaseNumberBadge(phase: phase)

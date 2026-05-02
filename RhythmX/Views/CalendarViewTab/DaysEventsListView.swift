@@ -7,7 +7,6 @@ import SwiftUI
 struct DaysEventsListView: View {
     @EnvironmentObject var eventStore: EventStore
     @Binding var dateSelected: DateComponents?
-    @State private var formType: EventFormType?
 
     var body: some View {
         NavigationStack {
@@ -18,7 +17,7 @@ struct DaysEventsListView: View {
                     }
                     List {
                         ForEach(foundEvents) { event in
-                            ListViewRow(event: event, formType: $formType)
+                            ListViewRow(event: event)
                                 .swipeActions {
                                     Button(role: .destructive) {
                                         eventStore.delete(event)
@@ -26,7 +25,6 @@ struct DaysEventsListView: View {
                                         Image(systemName: "trash")
                                     }
                                 }
-                                .sheet(item: $formType) { $0 }
                         }
                     }
                 }

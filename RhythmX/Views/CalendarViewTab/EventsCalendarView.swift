@@ -5,6 +5,7 @@ import SwiftUI
 struct EventsCalendarView: View {
     @EnvironmentObject var eventStore: EventStore
     @EnvironmentObject var archivedDataStore: ArchivedDataStore
+    @EnvironmentObject var appSettings: AppSettings
     @State private var dateSelected: DateComponents?
     @State private var displayEvents = false
     @State private var showNotificationPrompt = false
@@ -26,7 +27,7 @@ struct EventsCalendarView: View {
                     dateSelected: $dateSelected,
                     displayEvents: $displayEvents
                 )
-                .id(eventStore.shouldReloadAll)
+                .id("\(eventStore.shouldReloadAll)-\(appSettings.phaseColor1)-\(appSettings.phaseColor2)-\(appSettings.phaseColor3)-\(appSettings.phaseColor4)")
 
                 Image("launchScreen")
                     .resizable()
@@ -66,4 +67,5 @@ struct EventsCalendarView: View {
     EventsCalendarView()
         .environmentObject(EventStore(preview: true))
         .environmentObject(ArchivedDataStore())
+        .environmentObject(AppSettings())
 }
